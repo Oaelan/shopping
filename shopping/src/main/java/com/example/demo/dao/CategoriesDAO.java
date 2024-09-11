@@ -1,5 +1,6 @@
 package com.example.demo.dao;
 
-public class CategoriesDAO {
+public interface CategoriesDAO {
 
+	CategoriesEntity
 }
