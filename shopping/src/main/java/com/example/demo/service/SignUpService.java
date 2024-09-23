@@ -4,6 +4,6 @@ import com.example.demo.dto.UsersDTO;
 
 public interface SignUpService {
 
-	int signUp(UsersDTO UsersDTO);
+	int signUp(UsersDTO usersDTO);
 	
 }
