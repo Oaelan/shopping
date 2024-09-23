@@ -22,6 +22,7 @@ public class SecurityConfig {
 	        // 1. 요청에 대한 보안 설정
 	        .authorizeHttpRequests(authorizeRequests -> 
 	            authorizeRequests
+	            	.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // antMatchers 대신 requestMatchers 사용
 	                // 2. 모든 요청에 대해 인증이 필요함을 설정
 	                .anyRequest().authenticated()
 	        )
