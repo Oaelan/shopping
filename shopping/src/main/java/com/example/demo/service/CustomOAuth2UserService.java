@@ -11,9 +11,12 @@ import com.example.demo.dto.UsersDTO;
 import com.example.demo.entity.UsersEntity;
 import com.example.demo.repository.SignUpRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.Collections;
 import java.util.Map;
 @Service
+@Slf4j 
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Autowired
@@ -29,6 +32,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         String name = (String) response.get("name");
         String email = (String) response.get("email");
+        log.info("email,name:" + email,name);
 
         // 2. 사용자 정보를 회원가입 DTO로 변환
         UsersDTO userDTO = new UsersDTO();
