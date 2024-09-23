@@ -1,15 +1,16 @@
 package com.example.demo.controller;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.UsersDTO;
 import com.example.demo.service.SignUpService;
 
 import lombok.RequiredArgsConstructor;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class SignUpController {
 
@@ -17,13 +18,15 @@ public class SignUpController {
 	
 	@GetMapping("/signUp")
     public String signUpForm() {
-        return "signUp";
+        //return "signUp";
+        return "Sign up form available";
     }
 
 	
     @PostMapping("/signUp")
-    public String signUp(UsersDTO usersDTO) {
-        signUpService.signUp(usersDTO);
-        return "index";
+    public String signUp(@RequestBody UsersDTO usersDTO) {
+    	int userId = signUpService.signUp(usersDTO);
+        //return "index";
+        return "User signed up with ID: " + userId;
     }
 }

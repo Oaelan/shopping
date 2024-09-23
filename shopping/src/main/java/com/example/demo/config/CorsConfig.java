@@ -10,7 +10,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-            .allowedOrigins("http://localhost:8080", "http://협업자_IP주소")  // 협업자의 로컬 주소 추가
+            .allowedOrigins("http://localhost:8080", "http://172.29.4.12")  // 협업자의 로컬 주소 추가
             .allowedMethods("GET", "POST", "PUT", "DELETE")
             .allowedHeaders("*")
             .allowCredentials(true);
