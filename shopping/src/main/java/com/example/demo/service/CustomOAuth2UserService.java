@@ -45,6 +45,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             UsersEntity newUser = new UsersEntity();
             newUser.setUsername(userDTO.getUsername());
             newUser.setEmail(userDTO.getEmail());
+            newUser.setSocialLogin(true);
+            newUser.setSocialProvider("naver");
             
             
             signuprepository.save(newUser);  // DB에 새 사용자 저장
