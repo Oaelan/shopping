@@ -1,8 +1,11 @@
 package com.example.demo.entity;
 import jakarta.persistence.*;
+import lombok.Builder;
+
 import java.time.LocalDateTime;
 
 	@Entity
+	@Builder
 	@Table(name = "Users", uniqueConstraints = {
 	    @UniqueConstraint(columnNames = "username"),
 	    @UniqueConstraint(columnNames = "email")
