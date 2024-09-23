@@ -29,7 +29,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         String name = (String) response.get("name");
         String email = (String) response.get("email");
-        String id = (String) response.get("id");
 
         // 2. 사용자 정보를 회원가입 DTO로 변환
         UsersDTO userDTO = new UsersDTO();
