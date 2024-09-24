@@ -5,13 +5,18 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.ui.Model;
 
 
 
 @Controller
+@Slf4j
 public class TestController {
-
+	
+	@GetMapping("/loginSuccess")
 	public String loginSuccess(Model model, @AuthenticationPrincipal OAuth2User oAuth2User) {
 	    // OAuth2User로부터 사용자 이름 속성을 가져옴
 	    String name = oAuth2User.getAttribute("name");
@@ -30,4 +35,11 @@ public class TestController {
 	public String loginFailure(@RequestParam String param) {
 		return "loginFailure";
 	}
+	
+	@GetMapping("/")
+	public String goIndex() {
+		log.info("메인 컨트롤러");
+		return "main";
+	}
+	
 }
