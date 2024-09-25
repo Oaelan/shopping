@@ -47,6 +47,19 @@ import java.time.LocalDateTime;
 	    @Column(name = "role",length = 20)
 	    private String role; // ROLE_USER, ROLE_ADMIN 등
 	    
+	    
+	    
+	    @PrePersist
+	    protected void onCreate() {
+	        createdAt = LocalDateTime.now();
+	        updatedAt = LocalDateTime.now();
+	    }
+
+	    @PreUpdate
+	    protected void onUpdate() {
+	        updatedAt = LocalDateTime.now();
+	    }
+	    
 	    public UsersEntity (String username, String socialProvider, String email) {
 	    	this.username = username;
 	    	this.socialProvider = socialProvider;
@@ -55,8 +68,11 @@ import java.time.LocalDateTime;
 	    	this.isSocialLogin = true;
 	    	this.role ="ROLE_USER";
 	    }
+	    
+	    
 
-	  
+	    
+	    
 	    public String getRole() {
 	        return role;
 	    }
