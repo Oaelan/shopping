@@ -44,11 +44,20 @@ import java.time.LocalDateTime;
 	    @Column(name = "social_provider", length = 50)
 	    private String socialProvider;
 	    
+	    @Column(name = "role", nullable = false, length = 20)
+	    private String role; // ROLE_USER, ROLE_ADMIN 등
+	    
 	    public UsersEntity (String username, String socialProvider, String email) {
 	    	this.username = username;
 	    	this.socialProvider = socialProvider;
 	    	this.email = email;
 	    	this.password ="일단 나중에 설정ㅇ";
+	    	this.isSocialLogin = true;
+	    }
+
+	  
+	    public String getRole() {
+	        return role;
 	    }
 	    
 	   

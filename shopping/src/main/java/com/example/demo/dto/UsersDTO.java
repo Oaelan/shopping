@@ -22,4 +22,6 @@ public class UsersDTO {
     private LocalDateTime updatedAt;
     private boolean isSocialLogin;
     private String socialProvider;
+    
+    private String role;
 }
