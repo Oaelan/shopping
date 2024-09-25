@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -103,6 +104,20 @@ public class SecurityConfig {
         );
     }
 
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers(
+        											   
+				        		"/swagger-ui/**", 
+				        		"/v3/api-docs/**",
+				        		"/signUp",
+				        		"/",
+				        		"/login/oauth2/code/**"
+				        											    
+        											   );
+    }
+
+    
     // 비밀번호를 암호화하는 PasswordEncoder를 Bean으로 등록
     // BCryptPasswordEncoder는 비밀번호를 안전하게 암호화하기 위해 사용됨
     @Bean

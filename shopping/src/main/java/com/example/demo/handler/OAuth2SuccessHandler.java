@@ -28,7 +28,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler{
 	
 		String name = oAuth2User.getName();
 		
-		response.sendRedirect("http://localhost:3000/auth/oauth-response/3600");
+		response.sendRedirect("http://localhost:8080/"+name+"auth/oauth-response/3600");
 		
 	}
 }
