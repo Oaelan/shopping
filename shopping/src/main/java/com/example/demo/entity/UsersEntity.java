@@ -2,13 +2,17 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 	@NoArgsConstructor
 	@AllArgsConstructor
 	@Entity
 	@Builder
+	@Getter
+	@Setter
 	@Table(name = "Users", uniqueConstraints = {
 	    @UniqueConstraint(columnNames = "username"),
 	    @UniqueConstraint(columnNames = "email")
@@ -39,70 +43,13 @@ import java.time.LocalDateTime;
 
 	    @Column(name = "social_provider", length = 50)
 	    private String socialProvider;
-
-	    // Getters and Setters
-
-	    public int getUserId() {
-	        return userId;
+	    
+	    public UsersEntity (String username, String socialProvider, String email) {
+	    	this.username = username;
+	    	this.socialProvider = socialProvider;
+	    	this.email = email;
+	    	this.password ="일단 나중에 설정ㅇ";
 	    }
-
-	    public void setUserId(int userId) {
-	        this.userId = userId;
-	    }
-
-	    public String getUsername() {
-	        return username;
-	    }
-
-	    public void setUsername(String username) {
-	        this.username = username;
-	    }
-
-	    public String getPassword() {
-	        return password;
-	    }
-
-	    public void setPassword(String password) {
-	        this.password = password;
-	    }
-
-	    public String getEmail() {
-	        return email;
-	    }
-
-	    public void setEmail(String email) {
-	        this.email = email;
-	    }
-
-	    public LocalDateTime getCreatedAt() {
-	        return createdAt;
-	    }
-
-	    public void setCreatedAt(LocalDateTime createdAt) {
-	        this.createdAt = createdAt;
-	    }
-
-	    public LocalDateTime getUpdatedAt() {
-	        return updatedAt;
-	    }
-
-	    public void setUpdatedAt(LocalDateTime updatedAt) {
-	        this.updatedAt = updatedAt;
-	    }
-
-	    public boolean isSocialLogin() {
-	        return isSocialLogin;
-	    }
-
-	    public void setSocialLogin(boolean socialLogin) {
-	        isSocialLogin = socialLogin;
-	    }
-
-	    public String getSocialProvider() {
-	        return socialProvider;
-	    }
-
-	    public void setSocialProvider(String socialProvider) {
-	        this.socialProvider = socialProvider;
-	    }
+	    
+	   
 }

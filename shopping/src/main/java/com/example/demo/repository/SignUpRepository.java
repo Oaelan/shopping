@@ -5,7 +5,6 @@ import com.example.demo.entity.UsersEntity;
 
 public interface SignUpRepository extends JpaRepository<UsersEntity, Integer> {
 
-	// 이메일로 사용자를 찾는 메서드 선언
-    UsersEntity findByEmail(String email);
+	
 
 }
