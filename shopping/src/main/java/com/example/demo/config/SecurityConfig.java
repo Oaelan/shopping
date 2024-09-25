@@ -42,6 +42,8 @@ public class SecurityConfig {
     private final DefaultOAuth2UserService oAuthUserService;
 	private final OAuth2SuccessHandler oAuth2SuccessHandler;
     // Spring Security 설정을 정의하는 SecurityFilterChain을 Bean으로 등록
+	
+	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	    http
 	    	.cors(cors -> cors
@@ -103,19 +105,20 @@ public class SecurityConfig {
                 .build()
         );
     }
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers(
-        											   
-				        		"/swagger-ui/**", 
-				        		"/v3/api-docs/**",
-				        		"/signUp",
-				        		"/",
-				        		"/login/oauth2/code/**"
-				        											    
-        											   );
-    }
+//
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return (web) -> web.ignoring().requestMatchers(
+//        											   
+//				        		"/swagger-ui/**", 
+//				        		"/v3/api-docs/**",
+//				        		"/signUp",
+//				        		"/",
+//				        		"/login/oauth2/code/**"
+//				        											    
+//        											   );
+//    } 
+ //https://velog.io/@kgb/spring-security-permit-all-%EB%AC%B4%EC%8B%9C%EC%95%88%EB%90%98%EB%8A%94-%EA%B2%BD%EC%9A%B0
 
     
     // 비밀번호를 암호화하는 PasswordEncoder를 Bean으로 등록
