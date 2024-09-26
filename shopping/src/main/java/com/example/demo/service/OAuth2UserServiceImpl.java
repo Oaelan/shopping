@@ -46,7 +46,7 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
 //        if(oauthClientName.equals("naver")) {
 //        	name = "naver_" + oAuth2User.getAttributes().get("name");
 //        	email = "naver_" + oAuth2User.getAttributes().get("email");
-//        	usersEntity = new UsersEntity(name,"naver", email);
+//        	usersEntity = new UsersEntity(name,"naver", email)
 //        }
         
         if(oauthClientName.equals("Naver")) {
