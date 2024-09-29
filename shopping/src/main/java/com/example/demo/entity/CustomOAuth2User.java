@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -12,55 +13,46 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomOAuth2User implements OAuth2User {
-	private String name;
+    private String name;
+    private Set<GrantedAuthority> authorities;
+    private Map<String, Object> attributes;
+    private String nameAttributeKey;
 
+    // Constructor that matches the signature required
+    public CustomOAuth2User(Set<GrantedAuthority> authorities, Map<String, Object> attributes,
+                            String nameAttributeKey) {
+        this.authorities = authorities;
+        this.attributes = attributes;
+        this.nameAttributeKey = nameAttributeKey;
+    }
 
-	@Override
-	public Map<String, Object> getAttributes() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes;  // 사용자의 속성을 반환합니다.
+    }
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;  // 사용자의 권한을 반환합니다.
+    }
 
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return this.name;
-	}
+    @Override
+    public String getName() {
+        return (String) attributes.get(nameAttributeKey);  // 사용자 이름 속성을 반환합니다.
+    }
 
-	@Override
-	public int hashCode() {
-		// TODO Auto-generated method stub
-		return super.hashCode();
-	}
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		// TODO Auto-generated method stub
-		return super.equals(obj);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
 
-	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		// TODO Auto-generated method stub
-		return super.clone();
-	}
-
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return super.toString();
-	}
-
-	@Override
-	protected void finalize() throws Throwable {
-		// TODO Auto-generated method stub
-		super.finalize();
-	}
-
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

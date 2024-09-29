@@ -65,8 +65,7 @@ import java.time.LocalDateTime;
 	    	this.socialProvider = socialProvider;
 	    	this.email = email;
 	    	this.password ="일단 나중에 설정ㅇ";
-	    	this.isSocialLogin = true;
-	    	this.role ="ROLE_USER";
+	    	this.isSocialLogin = true;	    
 	    }
 	    
 	    

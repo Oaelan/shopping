@@ -1,45 +1,52 @@
 package com.example.demo.controller;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.example.demo.entity.CustomOAuth2User;
 
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.ui.Model;
 
 
-
 @Controller
 @Slf4j
+@RequestMapping("/login")
 public class TestController {
 	
-	@GetMapping("/loginSuccess")
-	public String loginSuccess(Model model, @AuthenticationPrincipal OAuth2User oAuth2User) {
-	    // OAuth2User로부터 사용자 이름 속성을 가져옴
-	    String name = oAuth2User.getAttribute("name");
+	@GetMapping("/Success")
+	public String loginSuccess(Model model) {
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    if (authentication == null || !(authentication.getPrincipal() instanceof OAuth2User)) {
+	        throw new IllegalStateException("No authenticated user found");
+	    }
 
-	    // "name"이라는 이름으로 사용자 이름을 모델에 추가
+	    CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
+
+	    // "name" 속성을 가져오는 방식으로 수정
+		String name = oAuth2User.getName();
 	    model.addAttribute("name", name);
-
-	    // loginSuccess.html로 이동
-	    return "loginSuccess";
+	   
+	   System.out.println(name);
+	    return "loginSuccess"; // main.html로 매핑
 	}
 
+
 	
 	
 	
-	@GetMapping("/loginFailure")
-	public String loginFailure(@RequestParam String param) {
+	@GetMapping("/Failure")
+	public String loginFailure() {
 		return "loginFailure";
 	}
 	
-	@GetMapping("/")
-	public String goIndex() {
-		log.info("메인 컨트롤러");
-		return "main";
-	}
+	
 	
 }

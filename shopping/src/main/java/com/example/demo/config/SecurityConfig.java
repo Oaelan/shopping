@@ -41,6 +41,8 @@ public class SecurityConfig {
 	
     private final DefaultOAuth2UserService oAuthUserService;
 	private final OAuth2SuccessHandler oAuth2SuccessHandler;
+	
+	
     // Spring Security 설정을 정의하는 SecurityFilterChain을 Bean으로 등록
 	
 	@Bean
@@ -52,13 +54,13 @@ public class SecurityConfig {
 	    	.csrf(csrf -> csrf.disable()) // CSRF 보호 비활성화
 	    	.httpBasic(httpBasic -> httpBasic.disable())
 	    	.sessionManagement(sessionManagement -> sessionManagement // 소문자로 수정
-	                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 관리 설정 (세션 사용 안한다는 뜻)
+	                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS) // 세션 관리 설정 (세션 사용 안한다는 뜻)
 	            )
 	        // 1. 요청에 대한 보안 설정
 	        .authorizeHttpRequests(request -> request
 	        		.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-	        		.requestMatchers("/swagger-ui/**", "/v3/api-docs/**","/signUp","/","/login/oauth2/code/**").permitAll() // antMatchers 대신 requestMatchers 사용
-	                .requestMatchers("/api/v1/user/**").hasRole("USER") // USER 권한 가진 사용자만 접근 가능
+	        		.requestMatchers("/swagger-ui/**", "/v3/api-docs/**","/signUp","/","/login/oauth2/code/**","/login/**","/oauth2/authorization/**","/api/v1/auth/oauth2/**").permitAll() // antMatchers 대신 requestMatchers 사용
+	                .requestMatchers("/login/Success").hasRole("USER") // USER 권한 가진 사용자만 접근 가능
 	                .requestMatchers("/api/v1/admin/**").hasRole("ADMIN") // ADMIN 권한 가진 사용자만 접근 가능
 	            	// 2. 모든 요청에 대해 인증이 필요함을 설정
 	                .anyRequest().authenticated()
@@ -70,6 +72,8 @@ public class SecurityConfig {
 	                .redirectionEndpoint(endpoint -> endpoint.baseUri("/login/oauth2/code/*")) // 여기에서 설정
 	        		.userInfoEndpoint(endpoint -> endpoint.userService(oAuthUserService))
 	        		.successHandler(oAuth2SuccessHandler)
+	        	
+	        		
         );
        
 
