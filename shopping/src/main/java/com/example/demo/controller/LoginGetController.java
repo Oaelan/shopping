@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.entity.CustomOAuth2User;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.ui.Model;
@@ -18,11 +19,12 @@ import org.springframework.ui.Model;
 
 @Controller
 @Slf4j
-@RequestMapping("/login")
-public class TestController {
+@RequestMapping("/user/login")
+public class LoginGetController {
+	
 	
 	@GetMapping("/Success")
-	public String loginSuccess(Model model) {
+	public String loginSuccess(Model model,HttpSession session) {
 	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    //이 줄에서는 Spring Security가 관리하는 현재 사용자 인증 정보를 가져옵니다.
 	    //SecurityContextHolder는 현재 사용자와 관련된 SecurityContext를 저장하고 있습니다.
@@ -47,14 +49,10 @@ public class TestController {
 	    log.info(name);
 	    return "loginSuccess"; // main.html로 매핑
 	}
-
-
 	
-	
-	
-	@GetMapping("/Failure")
-	public String loginFailure() {
-		return "loginFailure";
+	@GetMapping("/modify")
+	public String goModify() {
+		return "modifyUserInfo";
 	}
 	
 	

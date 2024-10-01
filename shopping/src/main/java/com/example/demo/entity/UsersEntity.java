@@ -60,11 +60,12 @@ import java.time.LocalDateTime;
 	        updatedAt = LocalDateTime.now();
 	    }
 	    
+	    //OAuth2UserServiceImpl에서 사용됨
 	    public UsersEntity (String username, String socialProvider, String email) {
 	    	this.username = username;
 	    	this.socialProvider = socialProvider;
 	    	this.email = email;
-	    	this.password ="일단 나중에 설정ㅇ";
+	    	this.password ="";
 	    	this.isSocialLogin = true;	    
 	    }
 	    

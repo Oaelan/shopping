@@ -9,4 +9,9 @@ public class TestController2 {
 	public String goIndex() {
 		return "main";
 	}
+	
+	@GetMapping("/Failure")
+	public String loginFailure() {
+		return "loginFailure";
+	}
 }

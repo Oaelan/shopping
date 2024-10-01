@@ -13,7 +13,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UsersDTO {
 	
-	
 	private int userId;
     private String username;
     private String password;
@@ -22,6 +21,4 @@ public class UsersDTO {
     private LocalDateTime updatedAt;
     private boolean isSocialLogin;
     private String socialProvider;
-    
-    private String role;
 }

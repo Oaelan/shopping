@@ -65,9 +65,9 @@ public class SecurityConfig {
 	            // FORWARD 타입의 요청은 누구나 접근 가능하게 설정
 	            .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
 	            // Swagger UI, 회원가입, 로그인 등 특정 경로는 모두 접근 가능하게 설정
-	            .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/signUp", "/", "/login/oauth2/code/**", "/login/**", "/oauth2/authorization/**", "/api/v1/auth/oauth2/**").permitAll()
+	            .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/signUp", "/", "/login/oauth2/code/**", "/login/**", "/login/Success/api/login", "/oauth2/authorization/**", "/api/v1/auth/oauth2/**","/Failure").permitAll()
 	            // `/login/Success` 경로는 "USER" 권한을 가진 사용자만 접근 가능
-	            .requestMatchers("/login/Success").hasRole("USER")
+	            .requestMatchers("/user/login/**").hasRole("USER")
 	            // `/api/v1/admin/**` 경로는 "ADMIN" 권한을 가진 사용자만 접근 가능
 	            .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
 	            // 그 외 모든 요청에 대해 인증 필요 설정

@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,8 +9,6 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-
-import com.example.demo.controller.TestController;
 import com.example.demo.dto.UsersDTO;
 import com.example.demo.entity.CustomOAuth2User;
 import com.example.demo.entity.UsersEntity;
@@ -50,40 +48,26 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
 		}
 
 		// 유저 엔티티 생성
-		// 사용자 이름/이메일 값을 저장할 변수 선
+		// 사용자 이름/이메일 값을 저장할 변수 선언
 		UsersEntity usersEntity = null;
 		String name = null;
 		String email = null;
 
-//   카카오 소셜 로그인 구현 경
-//        if(oauthClientName.equals("naver")) {
-//        	name = "naver_" + oAuth2User.getAttributes().get("name");
-//        	email = "naver_" + oAuth2User.getAttributes().get("email");
-//        	usersEntity = new UsersEntity(name,"naver", email)
-//        }
 
 		if (oauthClientName.equals("Naver")) {
 			Map<String, String> responseMap = (Map<String, String>) oAuth2User.getAttributes().get("response");
 			name = responseMap.get("name");
-			email = responseMap.get("email");
-
-			// 사용자 존재 여부 확인 후 저장
-			// Optional은 반환값이 null일 수 있을 때 이를 안전하게 다룰 수 있도록 도와주는 래퍼 클래스입니다.
-			// 즉, 사용자를 찾지 못했을 때 null 대신 Optional.empty()를 반환하여 NullPointerException을 방지할 수
-			// 있게 해줍니다.
-			// 이 방식으로 사용자를 찾았을 때 존재하면 UsersEntity 객체를 반환하고,
-			// 없으면 비어 있는 Optional 객체를 반환합니다.
-			Optional<UsersEntity> existingUser = usersRepository.findByEmail(email);
-			if (existingUser.isPresent()) { // 기존 사용자가 있는지 확인
-				usersEntity = existingUser.get(); // 사용자가 있으면 해당 사용자 정보를 가져옴
-			} else {
-				usersEntity = new UsersEntity(name, "naver", email); // 사용자가 없으면 새로운 사용자 생성
-				usersEntity.setRole("ROLE_USER"); // 기본 역할 "ROLE_USER" 설정
-				usersRepository.save(usersEntity); // 새로운 사용자 정보를 데이터베이스에 저장
-			}
-
+			email = responseMap.get("email");		
+			usersEntity = findOrCreateUser(name, email, "naver");
 		}
 
+		// 카카오 소셜 로그인 구현 경
+		//	        if(oauthClientName.equals("naver")) {
+		//	        	name = "naver_" + oAuth2User.getAttributes().get("name");
+		//	        	email = "naver_" + oAuth2User.getAttributes().get("email");
+		//	        	usersEntity = new UsersEntity(name,"naver", email)
+		//	        }
+		
 		// 네이버 응답의 "name" 값을 최상위 속성으로 추가
 		Map<String, Object> attributes = new HashMap<>(oAuth2User.getAttributes());
 		attributes.put("name", name);
@@ -103,5 +87,28 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
 		// Spring Security는 이 객체를 통해 인증된 사용자 정보를 계속해서 사용할 수 있게 합니다.
 		return new CustomOAuth2User(authorities, attributes, "name");
 
+	}
+	
+	private UsersEntity findOrCreateUser(String name, String email, String provider) {
+		// 사용자 존재 여부 확인 후 저장 Optional은 반환값이 null일 수 있을 때 이를 안전하게 다룰 수 있도록 도와주는 래퍼 클래스입니다.
+		// 즉, 사용자를 찾지 못했을 때 null 대신 Optional.empty()를 반환하여 NullPointerException을 방지할 수 있게 해줍니다.
+		// 이 방식으로 사용자를 찾았을 때 존재하면 UsersEntity 객체를 반환하고,
+		// 없으면 비어 있는 Optional 객체를 반환합니다.
+	    Optional<UsersEntity> existingUser = usersRepository.findByEmail(email);
+	    if (existingUser.isPresent()) {
+	    	
+	        UsersEntity usersEntity = existingUser.get();
+	        // 사용자 이름이 바뀐 경우에만 업데이트
+	        if (usersEntity.getUsername() != name){
+	            usersEntity.setUsername(name);
+	            usersRepository.save(usersEntity); // 업데이트 후 저장
+	        }
+	        return usersEntity;
+	    } else {
+	        UsersEntity usersEntity = new UsersEntity(name, provider, email);
+	        usersEntity.setRole("ROLE_USER"); // 기본 역할 부여
+	        usersRepository.save(usersEntity); // 새로운 사용자 저장
+	        return usersEntity;
+	    }
 	}
 }
