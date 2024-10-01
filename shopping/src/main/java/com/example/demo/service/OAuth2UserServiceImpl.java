@@ -1,4 +1,5 @@
 package com.example.demo.service;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,6 +10,7 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.controller.TestController;
 import com.example.demo.dto.UsersDTO;
 import com.example.demo.entity.CustomOAuth2User;
 import com.example.demo.entity.UsersEntity;
@@ -27,63 +29,79 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
-	
-    @Autowired
-    private UsersRepository usersRepository; // 사용자 정보를 저장할 레포지토리
 
-    @Override
-    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        OAuth2User oAuth2User = super.loadUser(userRequest);
-        String oauthClientName = userRequest.getClientRegistration().getClientName();
-        
-        try {
-        	System.out.println("으아아악" + new ObjectMapper().writeValueAsString(oAuth2User.getAttributes()));
-        }catch (Exception e) {
+	@Autowired
+	private UsersRepository usersRepository; // 사용자 정보를 저장할 레포지토리
+
+	@Override
+	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+		OAuth2User oAuth2User = super.loadUser(userRequest);
+		String oauthClientName = userRequest.getClientRegistration().getClientName();
+
+		try {
+			log.info("OAuth2UserServiceImpl: 실행", new ObjectMapper().writeValueAsString(oAuth2User.getAttributes()));
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    
-        
-        
-        UsersEntity usersEntity = null;
-        String name = null;
-        String email = null;
-  
+
+		// 유저 엔티티 생성
+		// 사용자 이름/이메일 값을 저장할 변수 선
+		UsersEntity usersEntity = null;
+		String name = null;
+		String email = null;
+
 //   카카오 소셜 로그인 구현 경
 //        if(oauthClientName.equals("naver")) {
 //        	name = "naver_" + oAuth2User.getAttributes().get("name");
 //        	email = "naver_" + oAuth2User.getAttributes().get("email");
 //        	usersEntity = new UsersEntity(name,"naver", email)
 //        }
-        
-        if (oauthClientName.equals("Naver")) {
-            Map<String, String> responseMap = (Map<String, String>) oAuth2User.getAttributes().get("response");
-            name = responseMap.get("name");
-            email = responseMap.get("email");
 
-            // 사용자 존재 여부 확인 후 저장
-            Optional<UsersEntity> existingUser = usersRepository.findByEmail(email);
-            if (existingUser.isPresent()) {
-                usersEntity = existingUser.get();
-            } else {
-                usersEntity = new UsersEntity(name, "naver", email);
-                usersEntity.setRole("ROLE_USER"); // 기본 역할 부여
-                usersRepository.save(usersEntity);
-            }
-        }
-        
-        // 네이버 응답의 "name" 값을 최상위 속성으로 추가
-        Map<String, Object> attributes = new HashMap<>(oAuth2User.getAttributes());
-        attributes.put("name", name);
-        
-        // 4. 권한 설정
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority(usersEntity.getRole())); // 사용자의 역할을 권한으로 추가
+		if (oauthClientName.equals("Naver")) {
+			Map<String, String> responseMap = (Map<String, String>) oAuth2User.getAttributes().get("response");
+			name = responseMap.get("name");
+			email = responseMap.get("email");
 
-        return new CustomOAuth2User(authorities, attributes, "name");
+			// 사용자 존재 여부 확인 후 저장
+			// Optional은 반환값이 null일 수 있을 때 이를 안전하게 다룰 수 있도록 도와주는 래퍼 클래스입니다.
+			// 즉, 사용자를 찾지 못했을 때 null 대신 Optional.empty()를 반환하여 NullPointerException을 방지할 수
+			// 있게 해줍니다.
+			// 이 방식으로 사용자를 찾았을 때 존재하면 UsersEntity 객체를 반환하고,
+			// 없으면 비어 있는 Optional 객체를 반환합니다.
+			Optional<UsersEntity> existingUser = usersRepository.findByEmail(email);
+			if (existingUser.isPresent()) { // 기존 사용자가 있는지 확인
+				usersEntity = existingUser.get(); // 사용자가 있으면 해당 사용자 정보를 가져옴
+			} else {
+				usersEntity = new UsersEntity(name, "naver", email); // 사용자가 없으면 새로운 사용자 생성
+				usersEntity.setRole("ROLE_USER"); // 기본 역할 "ROLE_USER" 설정
+				usersRepository.save(usersEntity); // 새로운 사용자 정보를 데이터베이스에 저장
+			}
 
-    }
+		}
+
+		// 네이버 응답의 "name" 값을 최상위 속성으로 추가
+		Map<String, Object> attributes = new HashMap<>(oAuth2User.getAttributes());
+		attributes.put("name", name);
+
+		// 권한 설정 - 사용자 권한 정보를 설정하는 부분입니다.
+		Set<GrantedAuthority> authorities = new HashSet<>(); // 권한(역할) 정보를 저장하기 위해 Set 자료 구조를 사용해 생성합니다.
+
+		// 사용자의 역할을 권한으로 추가합니다.
+		authorities.add(new SimpleGrantedAuthority(usersEntity.getRole())); // 사용자의 역할 정보(`usersEntity.getRole()`)를 가져와서
+																			// 권한 객체(`SimpleGrantedAuthority`)로 변환하고,
+																			// authorities Set에 추가합니다.
+
+		// 새로운 CustomOAuth2User 객체를 생성하여 반환합니다.
+		//이 객체는 사용자 권한 정보, 사용자 속성 정보, 이름을 가져오는 키를 포함합니다.
+		//CustomOAuth2User 객체는 OAuth2 인증 과정이 완료된 후 생성되며, 해당 객체는 Spring Security의 Authentication 객체 내부에 저장됩니다.
+		//이 과정에서 Authentication 객체는 SecurityContextHolder를 통해 보관되고,
+		// Spring Security는 이 객체를 통해 인증된 사용자 정보를 계속해서 사용할 수 있게 합니다.
+		return new CustomOAuth2User(authorities, attributes, "name");
+
+	}
 }
-

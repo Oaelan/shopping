@@ -11,9 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-@AllArgsConstructor
 public class CustomOAuth2User implements OAuth2User {
-    private String name;
     private Set<GrantedAuthority> authorities;
     private Map<String, Object> attributes;
     private String nameAttributeKey;

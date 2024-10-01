@@ -39,7 +39,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
 	
-    private final DefaultOAuth2UserService oAuthUserService;
+    private final DefaultOAuth2UserService oAuthUserService; // 인증후 토큰을 받아 객체 생성
 	private final OAuth2SuccessHandler oAuth2SuccessHandler;
 	
 	
@@ -48,38 +48,47 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	    http
-	    	.cors(cors -> cors
-	    			.configurationSource(corsConfigurationSource())
-	    			)
-	    	.csrf(csrf -> csrf.disable()) // CSRF 보호 비활성화
-	    	.httpBasic(httpBasic -> httpBasic.disable())
-	    	.sessionManagement(sessionManagement -> sessionManagement // 소문자로 수정
-	                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS) // 세션 관리 설정 (세션 사용 안한다는 뜻)
-	            )
+	        // CORS 설정
+	        .cors(cors -> cors
+	            .configurationSource(corsConfigurationSource())
+	        )
+	        // CSRF 보호 비활성화
+	        .csrf(csrf -> csrf.disable())
+	        // HTTP 기본 인증 비활성화
+	        .httpBasic(httpBasic -> httpBasic.disable())
+	        // 세션 관리 설정 (세션 사용, 항상 새로운 세션 생성)
+	        .sessionManagement(sessionManagement -> sessionManagement
+	            .sessionCreationPolicy(SessionCreationPolicy.ALWAYS) // 세션 정책 설정: ALWAYS는 매번 새로운 세션을 생성함
+	        )
 	        // 1. 요청에 대한 보안 설정
 	        .authorizeHttpRequests(request -> request
-	        		.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-	        		.requestMatchers("/swagger-ui/**", "/v3/api-docs/**","/signUp","/","/login/oauth2/code/**","/login/**","/oauth2/authorization/**","/api/v1/auth/oauth2/**").permitAll() // antMatchers 대신 requestMatchers 사용
-	                .requestMatchers("/login/Success").hasRole("USER") // USER 권한 가진 사용자만 접근 가능
-	                .requestMatchers("/api/v1/admin/**").hasRole("ADMIN") // ADMIN 권한 가진 사용자만 접근 가능
-	            	// 2. 모든 요청에 대해 인증이 필요함을 설정
-	                .anyRequest().authenticated()
+	            // FORWARD 타입의 요청은 누구나 접근 가능하게 설정
+	            .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
+	            // Swagger UI, 회원가입, 로그인 등 특정 경로는 모두 접근 가능하게 설정
+	            .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/signUp", "/", "/login/oauth2/code/**", "/login/**", "/oauth2/authorization/**", "/api/v1/auth/oauth2/**").permitAll()
+	            // `/login/Success` 경로는 "USER" 권한을 가진 사용자만 접근 가능
+	            .requestMatchers("/login/Success").hasRole("USER")
+	            // `/api/v1/admin/**` 경로는 "ADMIN" 권한을 가진 사용자만 접근 가능
+	            .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+	            // 그 외 모든 요청에 대해 인증 필요 설정
+	            .anyRequest().authenticated()
 	        )
-         // 3. OAuth2 소셜 로그인 기능을 설정
-	        .oauth2Login(oauth2 ->oauth2
-	        		//http://localhost:8080//api/v1/auth/oauth2/naver 인증 요청 주소 커스텀
-	        		.authorizationEndpoint(endpoint -> endpoint.baseUri("/api/v1/auth/oauth2"))
-	                .redirectionEndpoint(endpoint -> endpoint.baseUri("/login/oauth2/code/*")) // 여기에서 설정
-	        		.userInfoEndpoint(endpoint -> endpoint.userService(oAuthUserService))
-	        		.successHandler(oAuth2SuccessHandler)
-	        	
-	        		
-        );
-       
+	        // 3. OAuth2 소셜 로그인 기능을 설정
+	        .oauth2Login(oauth2 -> oauth2
+	            // 소셜 로그인 요청 주소를 커스텀 (`/api/v1/auth/oauth2/naver` 같은 형식)
+	        	// 네이버 소셜 로그인 버튼의 a링크 주소 (기본형은 /oauth2/authorization/{provider})
+	            .authorizationEndpoint(endpoint -> endpoint.baseUri("/api/v1/auth/oauth2"))
+	            // 리디렉션 엔드포인트를 커스텀 (`/login/oauth2/code/*`)
+	            .redirectionEndpoint(endpoint -> endpoint.baseUri("/login/oauth2/code/*"))
+	            // OAuth2 사용자 서비스 설정 (사용자 정보를 가져올 서비스)
+	            .userInfoEndpoint(endpoint -> endpoint.userService(oAuthUserService))
+	            // 인증 성공 후 핸들러 설정 (성공 시 실행되는 로직 정의)
+	            .successHandler(oAuth2SuccessHandler)
+	        );
 
-	    // 8. 설정이 끝난 보안 필터 체인을 반환하여 적용함
-	    return http.build();
+	    return http.build(); //http.build()를 호출하여 최종 보안 설정을 빌드하고,이 설정된 보안 필터 체인을 반환하는 것입니다.
 	}
+
 
 	@Bean
     protected CorsConfigurationSource corsConfigurationSource() {
