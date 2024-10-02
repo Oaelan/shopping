@@ -13,6 +13,10 @@
     <a href="/api/v1/auth/oauth2/naver">
         <img src="https://static.nid.naver.com/oauth/small_g_in.PNG" alt="네이버 로그인 버튼">
     </a>
+    
+    <a th:href="@{/oauth/kakao}">
+		<img th:src="@{/imgs/kakao_login_medium_narrow.png}">
+	</a>
 	<form action="/logout" method="POST">
     <button type="submit">로그아웃</button>
 </form>
