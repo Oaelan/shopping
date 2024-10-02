@@ -29,7 +29,7 @@ public class SignUpServiceImpl implements SignUpService{
 	            .isSocialLogin(false)
 	            .role("ROLE_USER")
 	            .build();
-	
+	    
 	    // 사용자 저장 후 userId 반환
 	    return signUpRepository.save(users).getUserId();
     }
