@@ -6,13 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class UsersDTO {
-	
 	private int userId;
     private String username;
     private String password;
@@ -22,3 +23,4 @@ public class UsersDTO {
     private boolean isSocialLogin;
     private String socialProvider;
 }
+

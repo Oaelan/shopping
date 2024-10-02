@@ -9,12 +9,14 @@ import org.springframework.stereotype.Service;
 import com.example.demo.dto.UsersDTO;
 import com.example.demo.entity.UsersEntity;
 import com.example.demo.repository.UsersRepository;
+import com.example.demo.service.LoginPostService;
+
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class LoginPostServiceImpl {
+public class LoginPostServiceImpl implements LoginPostService {
 	@Autowired
 	UsersRepository usersRepository;
 	@Autowired
@@ -46,19 +48,30 @@ public class LoginPostServiceImpl {
 
 	}
 
-	public UsersEntity login(UsersDTO usersDTO) {
-		String password = passwordEncoder.encode(usersDTO.getPassword());
-		UsersEntity usersEntity = new UsersEntity();
-		usersEntity.setEmail(usersDTO.getEmail());
-		usersEntity.setPassword(password);
-		// 데이터베이스에서 이메일로 사용자 찾기
-	    Optional<UsersEntity> existingUser = usersRepository.findByEmailAndPassword(usersEntity);
-	    if(existingUser.isPresent()) {
-	    	return existingUser.get();
-	    }
-	    else {
-	    	return existingUser.get();
+	public UsersDTO login(UsersDTO usersDTO) {
+	    // 데이터베이스에서 이메일로 사용자 찾기
+	    Optional<UsersEntity> existingUser = usersRepository.findByEmail(usersDTO.getEmail());
+	    
+	    if (existingUser.isPresent()) {
+	        UsersEntity foundUser = existingUser.get();
+	        
+	        // 사용자가 입력한 비밀번호와 데이터베이스의 암호화된 비밀번호 비교
+	        if (passwordEncoder.matches(usersDTO.getPassword(), foundUser.getPassword())) {
+	            // 비밀번호가 일치하면 UsersDTO로 변환하여 반환
+	            UsersDTO loginUser = new UsersDTO();
+	            loginUser.setEmail(foundUser.getEmail());
+	            loginUser.setUsername(foundUser.getUsername());
+	            loginUser.setUserId(foundUser.getUserId());
+	            // 필요한 정보들을 더 설정할 수 있습니다.
+
+	            return loginUser;
+	        } else {
+	            throw new IllegalArgumentException("Invalid password.");
+	        }
+	    } else {
+	        throw new IllegalArgumentException("No user found with the provided email.");
 	    }
 	}
+
 
 }
