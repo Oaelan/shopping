@@ -34,17 +34,4 @@ public class LoginRestController {
 		return "비밀번호가 수정되었습니다!";
 	}
 	
-	@PostMapping("/test")
-	public String postMethodName(@RequestBody UsersDTO usersDTO) {
-		try {
-	        UsersDTO foundUser = loginPostServiceImpl.login(usersDTO);
-	        return "loginSuccess"; // 로그인 성공 시
-	    } catch (IllegalArgumentException e) {
-	        // 로그인 실패 시, 실패 페이지 반환
-	        log.error("로그인 실패: " + e.getMessage());
-	        return "Failure";
-	    }
-	}
-	
-	
 }

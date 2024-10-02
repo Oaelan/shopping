@@ -14,4 +14,10 @@ public class TestController2 {
 	public String loginFailure() {
 		return "loginFailure";
 	}
+	
+	@GetMapping("/login")
+	public String goLogin() {
+		return "login";
+	}
+	
 }
