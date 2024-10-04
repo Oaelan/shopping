@@ -106,7 +106,7 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
 	        return usersEntity;
 	    } else {
 	        UsersEntity usersEntity = new UsersEntity(name, provider, email);
-	        usersEntity.setRole("ROLE_USER"); // 기본 역할 부여
+	        usersEntity.setRole("USER"); // 기본 역할 부여
 	        usersRepository.save(usersEntity); // 새로운 사용자 저장
 	        return usersEntity;
 	    }

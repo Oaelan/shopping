@@ -3,6 +3,8 @@ package com.example.demo.service.impl;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -72,6 +74,5 @@ public class LoginPostServiceImpl implements LoginPostService {
 	        throw new IllegalArgumentException("No user found with the provided email.");
 	    }
 	}
-
-
+	
 }

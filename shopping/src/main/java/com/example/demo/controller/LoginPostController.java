@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.demo.controller.rest.LoginRestController;
 import com.example.demo.dto.UsersDTO;
 import com.example.demo.entity.UsersEntity;
+import com.example.demo.service.LoginPostService;
 import com.example.demo.service.impl.LoginPostServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -18,14 +19,14 @@ import lombok.extern.slf4j.Slf4j;
 public class LoginPostController {
 
 	@Autowired
-	LoginPostServiceImpl loginPostServiceImpl;
+	LoginPostService loginPostService;
 
 	@PostMapping("/loginUser")
 	public String login(@RequestBody UsersDTO usersDTO,HttpSession session) {
 		log.info("로그인 컨트롤러 실행");
 		
 		try {
-	        UsersDTO foundUser = loginPostServiceImpl.login(usersDTO);
+	        UsersDTO foundUser = loginPostService.login(usersDTO);
 	        session.setAttribute("email", foundUser.getEmail());
 	        return "loginSuccess"; // 로그인 성공 시
 	    } catch (IllegalArgumentException e) {

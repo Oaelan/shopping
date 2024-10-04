@@ -27,7 +27,7 @@ public class SignUpServiceImpl implements SignUpService{
 	            .username(usersDTO.getUsername())
 	            .password(encodedPassword)  // 암호화된 비밀번호 저장
 	            .isSocialLogin(false)
-	            .role("ROLE_USER")
+	            .role("USER")
 	            .build();
 	    
 	    // 사용자 저장 후 userId 반환
