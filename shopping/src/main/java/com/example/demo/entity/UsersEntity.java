@@ -47,7 +47,8 @@ import java.time.LocalDateTime;
 	    @Column(name = "role",length = 20)
 	    private String role; // ROLE_USER, ROLE_ADMIN 등
 	    
-	    
+	    @Column(name = "refresh_token",length = 255)
+	    private String refreshToken;// ROLE_USER, ROLE_ADMIN 등
 	    
 	    @PrePersist
 	    protected void onCreate() {
@@ -76,6 +77,11 @@ import java.time.LocalDateTime;
 	    public String getRole() {
 	        return role;
 	    }
+
+		public Object updateRefreshToken(String refreshToken) {
+			this.refreshToken = refreshToken;
+			return null;
+		}
 	    
 	   
 }

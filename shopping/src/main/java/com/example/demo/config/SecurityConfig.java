@@ -4,7 +4,6 @@ import com.example.demo.filter.CustomJsonUsernamePasswordAuthenticationFilter;
 import com.example.demo.filter.JwtAuthenticationFilter;
 import com.example.demo.handler.*;
 import com.example.demo.handler.OAuth2SuccessHandler;
-import com.example.demo.repository.RefreshTokenRepository;
 import com.example.demo.repository.UsersRepository;
 import com.example.demo.service.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,7 +49,6 @@ public class SecurityConfig {
 	private final JwtService jwtService;
 	private final UsersRepository userRepository;
 	private final ObjectMapper objectMapper;
-    private final RefreshTokenRepository refreshTokenRepository;
 
 
 	// Spring Security 설정을 정의하는 SecurityFilterChain을 Bean으로 등록
@@ -68,9 +66,8 @@ public class SecurityConfig {
 				.httpBasic(httpBasic -> httpBasic.disable())
 				
 				// 세션 관리 설정 (세션 사용, 항상 새로운 세션 생성)
-				.sessionManagement(
-						sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.ALWAYS) // 세션																									// 생성함
-				)
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+
 				// 1. 요청에 대한 보안 설정
 				.authorizeHttpRequests(request -> request
 						// FORWARD 타입의 요청은 누구나 접근 가능하게 설정
@@ -120,12 +117,16 @@ public class SecurityConfig {
 	@Bean
 	protected CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration corsConfiguration = new CorsConfiguration();
-		corsConfiguration.addAllowedOrigin("*");
+		corsConfiguration.addAllowedOrigin("http://localhost:8080");
 		corsConfiguration.addAllowedMethod("*");
 		corsConfiguration.addAllowedHeader("*");
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", corsConfiguration);
+		
+		// 클라이언트에 노출할 헤더 설정
+	    corsConfiguration.addExposedHeader("Authorization");
+	    corsConfiguration.addExposedHeader("Authorization-refresh");
 
 		return source; // CorsConfigurationSource로 반환됨
 	}
@@ -186,7 +187,7 @@ public class SecurityConfig {
      */
     @Bean
     public LoginSuccessHandler loginSuccessHandler() {
-        return new LoginSuccessHandler(jwtService, userRepository,refreshTokenRepository);
+        return new LoginSuccessHandler(jwtService, userRepository);
     }
 
     /**
@@ -214,7 +215,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationProcessingFilter() {
-    	JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtService, userRepository,refreshTokenRepository);
+    	JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtService, userRepository);
         return jwtAuthenticationFilter;
     }
 
