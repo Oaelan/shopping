@@ -69,7 +69,7 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
 			name = (String)kakaoAccount.get("profile_nickname");
 			email = (String)kakaoAccount.get("account_email");
 			System.out.println(name+ email);
-			usersEntity = new UsersEntity(name, email, "kakao");
+			usersEntity = findOrCreateUser(name, email, "kakao");
 		}
 		
 		
