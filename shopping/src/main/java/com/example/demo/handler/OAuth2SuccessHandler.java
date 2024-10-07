@@ -31,10 +31,11 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         // 사용자 이름을 가져옵니다.
         String name = oAuth2User.getName();
-
+     // 성공적으로 인증된 후에 리다이렉트할 URL 설정
+        String targetUrl = "/user/login/Success"; // 원하는 리다이렉트 URL (예: 로그인 성공 후 홈 페이지로 이동)
         // 로그인 성공 후 사용자를 리디렉트하며, 쿼리 파라미터에 사용자 이름을 포함시킵니다.
-        response.sendRedirect("/user/login/Success?name=" + URLEncoder.encode(name, "UTF-8"));
-        // `URLEncoder.encode(name, "UTF-8")`을 사용하여 이름을 URL 인코딩합니다. (특수문자 처리를 위해)
+        //response.sendRedirect("/user/login/Success?name=" + URLEncoder.encode(name, "UTF-8"));
+        request.getRequestDispatcher(targetUrl).forward(request, response);
 
     }
 }
