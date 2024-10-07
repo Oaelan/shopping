@@ -21,6 +21,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.Console;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -61,12 +62,17 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
 			usersEntity = findOrCreateUser(name, email, "naver");
 		}
 
+		
 		// 카카오 소셜 로그인 구현 경
-		//	        if(oauthClientName.equals("naver")) {
-		//	        	name = "naver_" + oAuth2User.getAttributes().get("name");
-		//	        	email = "naver_" + oAuth2User.getAttributes().get("email");
-		//	        	usersEntity = new UsersEntity(name,"naver", email)
-		//	        }
+		if(oauthClientName.equals("Kakao")) {
+			Map<String, String> kakaoAccount = (Map<String, String>) oAuth2User.getAttributes().get("id");
+			name = (String)kakaoAccount.get("profile_nickname");
+			email = (String)kakaoAccount.get("account_email");
+			System.out.println(name+ email);
+			usersEntity = new UsersEntity(name, email, "kakao");
+		}
+		
+		
 		
 		// 네이버 응답의 "name" 값을 최상위 속성으로 추가
 		Map<String, Object> attributes = new HashMap<>(oAuth2User.getAttributes());
