@@ -20,6 +20,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import com.example.demo.repository.UsersRepository;
 import com.example.demo.service.JwtService;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -37,7 +38,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication) throws IOException {
+                                        Authentication authentication) throws IOException, ServletException{
         String email = extractUsername(authentication); // 인증 정보에서 Username(email) 추출
         String accessToken = jwtService.createAccessToken(email); // JwtService의 createAccessToken을 사용하여 AccessToken 발급
         String refreshToken = jwtService.createRefreshToken(); // JwtService의 createRefreshToken을 사용하여 RefreshToken 발급
@@ -56,18 +57,22 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         log.info("발급된 AccessToken 만료 기간 : {}", accessTokenExpiration);
         log.info("로그인에 성공하였습니다. refreshToken : {}", refreshToken);
         
-        // JSON 응답을 작성하여 클라이언트에 전송
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
+//        // JSON 응답을 작성하여 클라이언트에 전송
+//        response.setContentType("application/json");
+//        response.setCharacterEncoding("UTF-8");
+//        
+//        String jsonResponse = String.format(
+//            "{\"message\": \"로그인에 성공하였습니다.\", \"email\": \"%s\", \"accessToken\": \"%s\", \"refreshToken\": \"%s\"}",
+//            email, accessToken, refreshToken
+//        );
+//
+//        response.getWriter().write(jsonResponse);
         
-        String jsonResponse = String.format(
-            "{\"message\": \"로그인에 성공하였습니다.\", \"email\": \"%s\", \"accessToken\": \"%s\", \"refreshToken\": \"%s\"}",
-            email, accessToken, refreshToken
-        );
-
-        response.getWriter().write(jsonResponse);
+     // 성공적으로 인증된 후에 리다이렉트할 URL 설정
+        String targetUrl = "/user/login/Success"; // 원하는 리다이렉트 URL (예: 로그인 성공 후 홈 페이지로 이동)
         
-    
+        // RequestDispatcher를 사용하여 서버 내부에서 포워딩
+        request.getRequestDispatcher(targetUrl).forward(request, response);
         
     }
 

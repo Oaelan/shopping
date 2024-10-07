@@ -66,7 +66,7 @@ public class SecurityConfig {
 				.httpBasic(httpBasic -> httpBasic.disable())
 				
 				// 세션 관리 설정 (세션 사용, 항상 새로운 세션 생성)
-				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
 				// 1. 요청에 대한 보안 설정
 				.authorizeHttpRequests(request -> request
@@ -124,9 +124,9 @@ public class SecurityConfig {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", corsConfiguration);
 		
-		// 클라이언트에 노출할 헤더 설정
-	    corsConfiguration.addExposedHeader("Authorization");
-	    corsConfiguration.addExposedHeader("Authorization-refresh");
+//		// 클라이언트에 노출할 헤더 설정
+//	    corsConfiguration.addExposedHeader("Authorization");
+//	    corsConfiguration.addExposedHeader("Authorization-refresh");
 
 		return source; // CorsConfigurationSource로 반환됨
 	}
