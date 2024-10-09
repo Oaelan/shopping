@@ -1,13 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <title>Login Form</title>
+ 
 </head>
 <body>
-	<form action="/loginUser" method="post">
-		<input type="text" name="email"> <input type="password"
-			name="password"> <input type="submit">
-	</form>
+    <form id="loginForm">
+        <input type="text" name="email" placeholder="Email">
+        <input type="password" name="password" placeholder="Password">
+        <button type="submit">Login</button>
+    </form>
+       <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // 폼 요소를 변수에 저장
+            let loginForm = document.querySelector('#loginForm');
+
+            // 폼에 이벤트 리스너 추가 (submit 이벤트)
+            loginForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // 폼의 기본 동작(페이지 새로고침)을 막습니다.
+
+                // 폼 데이터 가져오기
+                let email = loginForm.querySelector('input[name="email"]').value;
+                let password = loginForm.querySelector('input[name="password"]').value;
+
+                // JSON 데이터 생성
+                let loginData = {
+                    email: email,
+                    password: password
+                };
+
+                // AJAX 요청으로 JSON 데이터 전송
+                fetch('/loginUser', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json' // 요청 헤더에 JSON임을 명시
+                    },
+                    body: JSON.stringify(loginData) // 객체를 JSON 문자열로 변환하여 전송
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            });
+        });
+    </script>
 </body>
 </html>

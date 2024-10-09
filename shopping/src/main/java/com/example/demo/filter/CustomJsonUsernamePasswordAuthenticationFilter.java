@@ -63,40 +63,18 @@ public class CustomJsonUsernamePasswordAuthenticationFilter extends AbstractAuth
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException {
         if (request.getContentType() == null ||
-            (!request.getContentType().equalsIgnoreCase(CONTENT_TYPE) &&
-             !request.getContentType().equalsIgnoreCase("application/x-www-form-urlencoded"))) {
+            (!request.getContentType().equalsIgnoreCase(CONTENT_TYPE))) {
             throw new AuthenticationServiceException("Authentication Content-Type not supported: " + request.getContentType());
         }
 
-        String email;
-        String password;
-
-        if (request.getContentType().equalsIgnoreCase(CONTENT_TYPE)) {
             // JSON 방식 처리
             String messageBody = StreamUtils.copyToString(request.getInputStream(), StandardCharsets.UTF_8);
             Map<String, String> usernamePasswordMap = objectMapper.readValue(messageBody, Map.class);
-            email = usernamePasswordMap.get(USERNAME_KEY);
-            password = usernamePasswordMap.get(PASSWORD_KEY);
-        } else {
-            // application/x-www-form-urlencoded 방식 처리
-            email = request.getParameter(USERNAME_KEY);
-            password = request.getParameter(PASSWORD_KEY);
-        }
-
-        if (email == null || password == null) {
-            throw new AuthenticationServiceException("Username or Password not provided");
-        }
-
+            String email = usernamePasswordMap.get(USERNAME_KEY);
+            String password = usernamePasswordMap.get(PASSWORD_KEY);
+            
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(email, password);
-        setDetails(request, authRequest);
         log.info("authRequest {}",authRequest.getPrincipal());
         return this.getAuthenticationManager().authenticate(authRequest);
-    }
-
-    /**
-     * 인증 요청에 대한 추가적인 세부 사항을 설정하는 메소드.
-     */
-    protected void setDetails(HttpServletRequest request, UsernamePasswordAuthenticationToken authRequest) {
-        authRequest.setDetails(authenticationDetailsSource.buildDetails(request));
     }
 }

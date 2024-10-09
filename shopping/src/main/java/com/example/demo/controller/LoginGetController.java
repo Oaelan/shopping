@@ -24,7 +24,7 @@ import org.springframework.ui.Model;
 public class LoginGetController {
 	
 	
-	@PostMapping("/Success")
+	@GetMapping("/Success")
 	public String loginSuccess(Model model) {
 	    // 현재 인증된 사용자 정보를 가져오기 위해 Spring Security의 SecurityContextHolder를 사용합니다.
 	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -68,12 +68,9 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 //
 //        response.getWriter().write(jsonResponse);
         
-     // 성공적으로 인증된 후에 리다이렉트할 URL 설정
-        String targetUrl = "/user/login/Success"; // 원하는 리다이렉트 URL (예: 로그인 성공 후 홈 페이지로 이동)
-        
-        // RequestDispatcher를 사용하여 서버 내부에서 포워딩
-        request.getRequestDispatcher(targetUrl).forward(request, response);
-        
+     // 클라이언트 측 리다이렉션 수행
+        String targetUrl = "/user/login/Success"; // 로그인 성공 후 리다이렉션할 URL
+        response.sendRedirect(targetUrl); // 클라이언트에게 리다이렉션 요청
     }
 
     private String extractUsername(Authentication authentication) {

@@ -41,7 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private final JwtService jwtService;
 	private final UsersRepository userRepository;
 
-	private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
+	//private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -80,17 +80,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	}
 
 	public void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response,
-			FilterChain filterChain) throws ServletException, IOException {
-		log.info("checkAccessTokenAndAuthentication() 호출");
+	        FilterChain filterChain) throws ServletException, IOException {
+	    log.info("checkAccessTokenAndAuthentication() 호출");
 
-		jwtService.extractAccessToken(request).filter(jwtService::isTokenValid).ifPresentOrElse(accessToken -> {
-			jwtService.extractEmail(accessToken)
-					.ifPresent(email -> userRepository.findByEmail(email).ifPresent(this::saveAuthentication));
-			log.info("Access Token에서 사용자 이메일 추출 성공");
-		}, () -> log.warn("Access Token이 유효하지 않거나 추출에 실패했습니다."));
+	    jwtService.extractAccessToken(request)
+	        .filter(jwtService::isTokenValid)
+	        .ifPresent(accessToken -> {
+	            jwtService.extractEmail(accessToken)
+	                .ifPresent(email -> userRepository.findByEmail(email).ifPresent(this::saveAuthentication));
+	        });
 
-		filterChain.doFilter(request, response);
+	    filterChain.doFilter(request, response);
 	}
+
 
 	public void saveAuthentication(UsersEntity myUser) {
 		String password = myUser.getPassword();
@@ -101,9 +103,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		UserDetails userDetailsUser = org.springframework.security.core.userdetails.User.builder()
 				.username(myUser.getEmail()).password(password).roles(myUser.getRole()).build();
 
-		Authentication authentication = new UsernamePasswordAuthenticationToken(userDetailsUser, null,
-				authoritiesMapper.mapAuthorities(userDetailsUser.getAuthorities()));
-
+		Authentication authentication = new UsernamePasswordAuthenticationToken(userDetailsUser, password,
+				userDetailsUser.getAuthorities());
+		
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		log.info("SecurityContextHolder에 인증 정보가 설정되었습니다. 사용자 이메일: {}", myUser.getEmail());
 

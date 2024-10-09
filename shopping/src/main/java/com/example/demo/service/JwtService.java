@@ -89,7 +89,7 @@ public class JwtService {
     public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
         response.setStatus(HttpServletResponse.SC_OK);
         setAccessTokenHeader(response, accessToken);
-        setRefreshTokenHeader(response, refreshToken);
+        setRefreshTokenHeader(response, refreshToken);    
         log.info("Access Token, Refresh Token 헤더 설정 완료");
     }
 
@@ -166,7 +166,10 @@ public class JwtService {
      */
     public boolean isTokenValid(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token);
+            Jwts.parserBuilder()
+            .setSigningKey(getSigningKey())
+            .build()
+            .parseClaimsJws(token);
             return true;
         } catch (Exception e) {
             log.error("유효하지 않은 토큰입니다. {}", e.getMessage());

@@ -20,7 +20,7 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -144,19 +144,13 @@ public class SecurityConfig {
 						.roles("USER") // 사용자의 역할(Role) 설정
 						.build());
 	}
-//
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() {
-//        return (web) -> web.ignoring().requestMatchers(
-//        											   
-//				        		"/swagger-ui/**", 
-//				        		"/v3/api-docs/**",
-//				        		"/signUp",
-//				        		"/",
-//				        		"/login/oauth2/code/**"
-//				        											    
-//        											   );
-//    } 
+
+	@Bean
+	public WebSecurityCustomizer webSecurityCustomizer() {
+	    // WebSecurityCustomizer를 통해 "/favicon.ico" 경로를 보안 필터 체인에서 제외합니다.
+	    return (web) -> web.ignoring().requestMatchers("/favicon.ico");
+	}
+
 	// https://velog.io/@kgb/spring-security-permit-all-%EB%AC%B4%EC%8B%9C%EC%95%88%EB%90%98%EB%8A%94-%EA%B2%BD%EC%9A%B0
 
 	// 비밀번호를 암호화하는 PasswordEncoder를 Bean으로 등록
