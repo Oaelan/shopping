@@ -65,10 +65,17 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
 		
 		// 카카오 소셜 로그인 구현 경
 		if(oauthClientName.equals("Kakao")) {
-			Map<String, String> kakaoAccount = (Map<String, String>) oAuth2User.getAttributes().get("id");
-			name = (String)kakaoAccount.get("profile_nickname");
-			email = (String)kakaoAccount.get("account_email");
-			System.out.println(name+ email);
+			log.info("카카오 id: "+oAuth2User);
+			// 전체 사용자 속성 가져오기
+			Map<String, Object> attributes = oAuth2User.getAttributes();
+			// kakao_account 정보 가져오기
+			Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
+			// profile 정보 가져오기
+			Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
+			name = (String)profile.get("nickname"); 
+			email = (String)kakaoAccount.get("email");
+			log.info("카카오 nickname: "+ name + "카카오 이메일: "+email);
+			 
 			usersEntity = findOrCreateUser(name, email, "kakao");
 		}
 		
