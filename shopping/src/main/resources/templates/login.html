@@ -39,14 +39,48 @@
                     body: JSON.stringify(loginData) // 객체를 JSON 문자열로 변환하여 전송
                 })
                 .then(response => response.json())
-                .then(data => {
-                    console.log('Success:', data);
+                .then(data => {// 로그인 성공 시 토큰을 localStorage에 저장
+                    localStorage.setItem('accessToken', data.accessToken);
+                    localStorage.setItem('refreshToken', data.refreshToken);
+                    console.log('토큰이 저장되었습니다:', data);console.log('Success:', data);
+                 // 로그인 성공 후 리다이렉션
+                    SuccessLogin();
                 })
                 .catch((error) => {
                     console.error('Error:', error);
                 });
             });
         });
+        
+        function SuccessLogin() {
+            const accessToken = localStorage.getItem('accessToken');
+            
+            // JWT 토큰을 Authorization 헤더에 포함하여 요청 전송
+            fetch("/user/login/Success", {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // 응답이 성공적일 경우 페이지 이동
+                    return response.text();  // 페이지의 HTML 응답을 받음
+                } else {
+                    throw new Error('인증 실패');
+                }
+            })
+            .then(html => {
+                document.open();
+                document.write(html);  // 받은 HTML 응답으로 페이지 교체
+                document.close();
+            })
+            .catch(error => {
+                console.error('에러:', error);
+            });
+        }
+
     </script>
 </body>
 </html>

@@ -57,20 +57,19 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         log.info("발급된 AccessToken 만료 기간 : {}", accessTokenExpiration);
         log.info("로그인에 성공하였습니다. refreshToken : {}", refreshToken);
         
-//        // JSON 응답을 작성하여 클라이언트에 전송
-//        response.setContentType("application/json");
-//        response.setCharacterEncoding("UTF-8");
-//        
-//        String jsonResponse = String.format(
-//            "{\"message\": \"로그인에 성공하였습니다.\", \"email\": \"%s\", \"accessToken\": \"%s\", \"refreshToken\": \"%s\"}",
-//            email, accessToken, refreshToken
-//        );
-//
-//        response.getWriter().write(jsonResponse);
+       
+        // JSON 응답을 작성하여 클라이언트에 전송
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+       
+     // JSON 형식으로 응답 생성
+        String jsonResponse = String.format(
+            "{\"message\": \"로그인에 성공하였습니다.\", \"email\": \"%s\", \"accessToken\": \"%s\", \"refreshToken\": \"%s\"}",
+            email, accessToken, refreshToken
+        );
+
+        response.getWriter().write(jsonResponse);
         
-     // 클라이언트 측 리다이렉션 수행
-        String targetUrl = "/user/login/Success"; // 로그인 성공 후 리다이렉션할 URL
-        response.sendRedirect(targetUrl); // 클라이언트에게 리다이렉션 요청
     }
 
     private String extractUsername(Authentication authentication) {

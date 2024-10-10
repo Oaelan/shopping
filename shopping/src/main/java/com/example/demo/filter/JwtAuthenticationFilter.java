@@ -37,6 +37,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private static final String NO_CHECK_URL = "/loginUser"; // "/login"으로 들어오는 요청은 Filter 작동 X
+	private static final String NO_CHECK_URL1 = "/signUp"; // "/login"으로 들어오는 요청은 Filter 작동 X
 
 	private final JwtService jwtService;
 	private final UsersRepository userRepository;
@@ -46,10 +47,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		if (request.getRequestURI().equals(NO_CHECK_URL)) {
+		if (request.getRequestURI().equals(NO_CHECK_URL) || request.getRequestURI().equals(NO_CHECK_URL1)) {
 			filterChain.doFilter(request, response); // "/loginUser" 요청이 들어오면, 다음 필터 호출
 			return; // return으로 이후 현재 필터 진행 막기 (안해주면 아래로 내려가서 계속 필터 진행시킴)
 		}
+		
 
 		String refreshToken = jwtService.extractRefreshToken(request).filter(jwtService::isTokenValid).orElse(null);
 
