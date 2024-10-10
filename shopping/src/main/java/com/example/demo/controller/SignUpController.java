@@ -31,7 +31,7 @@ public class SignUpController {
     public String signUp(@ModelAttribute UsersDTO usersDTO, RedirectAttributes redirectAttributes) {
     	int userId = signUpService.signUp(usersDTO);
     	redirectAttributes.addFlashAttribute("message", "회원가입 성공!");
-        return "redirect: /";
+        return "redirect:/";
         //return "User signed up with ID: " + userId;
     }
 }
