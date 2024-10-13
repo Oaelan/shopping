@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.repository.UsersRepository;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import javax.crypto.spec.SecretKeySpec;
@@ -32,7 +33,7 @@ public class JwtService {
     private Long accessTokenExpirationPeriod;
 
     @Value("${jwt.refresh.expiration}")
-    private Long refreshTokenExpirationPeriod;
+    private int refreshTokenExpirationPeriod;
 
     @Value("${jwt.access.header}")
     private String accessHeader;
@@ -98,7 +99,7 @@ public class JwtService {
      */
     public Optional<String> extractRefreshToken(HttpServletRequest request) {
     	String authorizationHeader = request.getHeader(refreshHeader);
-        log.info("Authorization 헤더 값: {}", authorizationHeader);
+        log.info("Authorization - RefreshToken 헤더 값: {}", authorizationHeader);
         
         return Optional.ofNullable(request.getHeader(refreshHeader))
                 .filter(token -> token.startsWith(BEARER))
@@ -110,7 +111,7 @@ public class JwtService {
      */
     public Optional<String> extractAccessToken(HttpServletRequest request) {
     	String authorizationHeader = request.getHeader(accessHeader);
-        log.info("Authorization 헤더 값: {}", authorizationHeader);
+        log.info("Authorization - AccessToken 헤더 값: {}", authorizationHeader);
         
         return Optional.ofNullable(request.getHeader(accessHeader))
                 .filter(token -> token.startsWith(BEARER))
@@ -145,7 +146,15 @@ public class JwtService {
      * RefreshToken 헤더 설정
      */
     public void setRefreshTokenHeader(HttpServletResponse response, String refreshToken) {
-        response.setHeader(refreshHeader, refreshToken);
+    	// 리프레시 토큰을 쿠키에 설정
+        Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
+        refreshCookie.setHttpOnly(true); // 자바스크립트에서 접근 불가능
+        refreshCookie.setSecure(true); // HTTPS에서만 전송
+        refreshCookie.setPath("/"); // 쿠키의 유효 경로 설정
+        refreshCookie.setMaxAge(refreshTokenExpirationPeriod); // 쿠키 만료 시간 설정 (예: 7일)
+
+        response.addCookie(refreshCookie); // 쿠키 추가
+        log.info("Refresh Token 쿠키 설정 완료");
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.example.demo.config;
 
 import com.example.demo.filter.CustomJsonUsernamePasswordAuthenticationFilter;
+import com.example.demo.filter.CustomLogoutFilter;
 import com.example.demo.filter.JwtAuthenticationFilter;
 import com.example.demo.handler.*;
 import com.example.demo.handler.OAuth2SuccessHandler;
@@ -8,7 +9,12 @@ import com.example.demo.repository.UsersRepository;
 import com.example.demo.service.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.DispatcherType;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,6 +28,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,6 +39,8 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -49,6 +58,7 @@ public class SecurityConfig {
 	private final JwtService jwtService;
 	private final UsersRepository userRepository;
 	private final ObjectMapper objectMapper;
+	private final CustomLogoutSuccessHandler logoutSuccessHandler;
 
 
 	// Spring Security 설정을 정의하는 SecurityFilterChain을 Bean으로 등록
@@ -76,7 +86,7 @@ public class SecurityConfig {
 						.requestMatchers("/swagger-ui/**", 
 								"/v3/api-docs/**", "/signUp", 
 								"/", "/login/oauth2/code/**",
-								"/login", 
+								"/login","/favicon.ico",
 								"/oauth2/authorization/**",
 								"/api/v1/auth/oauth2/**",
 								"/Failure","/loginUser")
@@ -103,7 +113,48 @@ public class SecurityConfig {
 						.userInfoEndpoint(endpoint -> endpoint.userService(oAuthUserService))
 						// 인증 성공 후 핸들러 설정 (성공 시 실행되는 로직 정의)
 						.successHandler(oAuth2SuccessHandler)
-				);
+				)
+				
+		.logout(logout -> logout
+	            .logoutUrl("/logout") // 기본 로그아웃 URL 설정
+	            .logoutSuccessUrl("/login") // 로그아웃 성공 후 리다이렉트 URL
+	            .addLogoutHandler(new LogoutHandler() { // 커스텀 로그아웃 핸들러 추가
+	            	 public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+	            	    
+	            	        // 리프레쉬 토큰 추출
+	            	        String refreshToken = jwtService.extractRefreshToken(request).orElse(null);
+	            	        if (refreshToken != null) {
+	            	            // 유저 테이블에서 해당 리프레쉬 토큰을 삭제
+	            	            userRepository.findByRefreshToken(refreshToken).ifPresent(user -> {
+	            	                user.updateRefreshToken(null); // 리프레쉬 토큰 삭제
+	            	                userRepository.save(user);
+	            	            });
+	            	        }else {
+	            	        	log.info("리프레쉬 토큰 없음");
+	            	        }
+	            	        
+	            	        // 세션 무효화
+	            	        HttpSession session = request.getSession(false);
+	            	        if (session != null) {
+	            	            session.invalidate();
+	            	        }
+	            	    }
+	            	 
+	            })
+	            .logoutSuccessHandler(new LogoutSuccessHandler() { // 커스텀 로그아웃 성공 핸들러 추가
+	                @Override
+	                public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+	                    try {
+							response.sendRedirect("/login");
+						} catch (java.io.IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} // 로그아웃 성공 후 리다이렉트
+	                }
+	            })
+	            .deleteCookies("JSESSIONID") // 쿠키 삭제
+	        );
+
 			
 		// 원래 스프링 시큐리티 필터 순서가 LogoutFilter 이후에 로그인 필터 동작
         // 따라서, LogoutFilter 이후에 우리가 만든 필터 동작하도록 설정
@@ -145,11 +196,11 @@ public class SecurityConfig {
 						.build());
 	}
 
-	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer() {
-	    // WebSecurityCustomizer를 통해 "/favicon.ico" 경로를 보안 필터 체인에서 제외합니다.
-	    return (web) -> web.ignoring().requestMatchers("/favicon.ico");
-	}
+//	@Bean
+//	public WebSecurityCustomizer webSecurityCustomizer() {
+//	    // WebSecurityCustomizer를 통해 "/favicon.ico" 경로를 보안 필터 체인에서 제외합니다.
+//	    return (web) -> web.ignoring().requestMatchers("/favicon.ico");
+//	}
 
 	// https://velog.io/@kgb/spring-security-permit-all-%EB%AC%B4%EC%8B%9C%EC%95%88%EB%90%98%EB%8A%94-%EA%B2%BD%EC%9A%B0
 

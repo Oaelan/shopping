@@ -35,12 +35,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
-	private static final String NO_CHECK_URL = "/loginUser"; // "/login"으로 들어오는 요청은 Filter 작동 X
-	private static final String NO_CHECK_URL1 = "/signUp"; // "/login"으로 들어오는 요청은 Filter 작동 X
-	private static final String NO_CHECK_URL2 = "/"; // "/login"으로 들어오는 요청은 Filter 작동 X
-
-	
+	private static final String CHECK_URL = "/user/login/"; // "/login"으로 들어오는 요청은 Filter 작동 X
+	private static final String CHECK_URL1 ="/"; 
 	private final JwtService jwtService;
 	private final UsersRepository userRepository;
 
@@ -50,35 +46,45 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		log.info("요청 URI: {}", request.getRequestURI()); // 추가
-		if (request.getRequestURI().equals(NO_CHECK_URL) || request.getRequestURI().equals(NO_CHECK_URL1) || request.getRequestURI().equals(NO_CHECK_URL2)) {
-			filterChain.doFilter(request, response); // "/loginUser" 요청이 들어오면, 다음 필터 호출
-			return; // return으로 이후 현재 필터 진행 막기 (안해주면 아래로 내려가서 계속 필터 진행시킴)
-		}
 		
+		if (request.getRequestURI().startsWith(CHECK_URL)) {
 
 		String refreshToken = jwtService.extractRefreshToken(request).filter(jwtService::isTokenValid).orElse(null);
-
+		
+		
+		// 액세스 토큰이 유효하지 않은 경우
+		// 클라이언트에서 리프레쉬토큰을 헤더에 넣어 다시 요청
 		if (refreshToken != null) {
+			//아래의 메소드를 호출하여 액세스/리프레쉬 토큰 재발급 
 			checkRefreshTokenAndReIssueAccessToken(response, refreshToken);
 			return;
 		}
 
-		// RefreshToken이 없거나 유효하지 않다면, AccessToken을 검사하고 인증을 처리하는 로직 수행
+		// 액세스 토큰이 유효한 경우
 		if (refreshToken == null) {
+			
 			checkAccessTokenAndAuthentication(request, response, filterChain);
 		}
+	  }else {
+		  log.info("JwtAuthenticationFilter 건뜀ㅇㅇ");
+		  filterChain.doFilter(request, response);
+	  }
 	}
 
 	public void checkRefreshTokenAndReIssueAccessToken(HttpServletResponse response, String refreshToken) {
 		userRepository.findByRefreshToken(refreshToken).ifPresent(user -> {
+			
 			String reIssuedRefreshToken = reIssueRefreshToken(user);
+			// 재발급 받은 토큰 리스폰 헤더 설정
 			jwtService.sendAccessAndRefreshToken(response, jwtService.createAccessToken(user.getEmail()),
 					reIssuedRefreshToken);
 		});
 	}
 
 	private String reIssueRefreshToken(UsersEntity user) {
+		// 리프레쉬 토큰 재발급
 		String reIssuedRefreshToken = jwtService.createRefreshToken();
+		// 리프레쉬 토큰 컬럼열 업데이트
 		user.updateRefreshToken(reIssuedRefreshToken);
 		userRepository.saveAndFlush(user);
 		return reIssuedRefreshToken;

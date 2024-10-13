@@ -12,7 +12,6 @@ import com.example.demo.repository.UsersRepository;
 public class LoginService implements UserDetailsService {
 	@Autowired
 	UsersRepository usersRepository;
-	
 	@Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UsersEntity usersEntity = usersRepository.findByEmail(email)

@@ -21,19 +21,19 @@ public class LoginPostController {
 	@Autowired
 	LoginPostService loginPostService;
 
-	@PostMapping("/loginUser")
-	public String login(@RequestBody UsersDTO usersDTO,HttpSession session) {
-		log.info("로그인 컨트롤러 실행");
-		
-		try {
-	        UsersDTO foundUser = loginPostService.login(usersDTO);
-	        session.setAttribute("email", foundUser.getEmail());
-	        return "loginSuccess"; // 로그인 성공 시
-	    } catch (IllegalArgumentException e) {
-	        // 로그인 실패 시, 실패 페이지 반환
-	        log.error("로그인 실패: " + e.getMessage());
-	        return "redirect:/Failure";
-	    }
-	}
+//	@PostMapping("/loginUser")
+//	public String login(@RequestBody UsersDTO usersDTO,HttpSession session) {
+//		log.info("로그인 컨트롤러 실행");
+//		
+//		try {
+//	        UsersDTO foundUser = loginPostService.login(usersDTO);
+//	        session.setAttribute("email", foundUser.getEmail());
+//	        return "loginSuccess"; // 로그인 성공 시
+//	    } catch (IllegalArgumentException e) {
+//	        // 로그인 실패 시, 실패 페이지 반환
+//	        log.error("로그인 실패: " + e.getMessage());
+//	        return "redirect:/Failure";
+//	    }
+//	}
 		
 }

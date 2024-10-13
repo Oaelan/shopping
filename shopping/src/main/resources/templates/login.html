@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Login Form</title>
- 
+<meta charset="UTF-8">
+<title>Login Form</title>
+
 </head>
 <body>
-    <form id="loginForm">
-        <input type="text" name="email" placeholder="Email">
-        <input type="password" name="password" placeholder="Password">
-        <button type="submit">Login</button>
-    </form>
-       <script>
+	<form id="loginForm">
+		<input type="text" name="email" placeholder="Email"> <input
+			type="password" name="password" placeholder="Password">
+		<button type="submit">Login</button>
+	</form>
+	<script>
         document.addEventListener("DOMContentLoaded", function() {
             // 폼 요소를 변수에 저장
             let loginForm = document.querySelector('#loginForm');
@@ -30,57 +30,38 @@
                     password: password
                 };
 
-                // AJAX 요청으로 JSON 데이터 전송
                 fetch('/loginUser', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json' // 요청 헤더에 JSON임을 명시
+                        'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(loginData) // 객체를 JSON 문자열로 변환하여 전송
+                    body: JSON.stringify(loginData)
                 })
-                .then(response => response.json())
-                .then(data => {// 로그인 성공 시 토큰을 localStorage에 저장
-                    localStorage.setItem('accessToken', data.accessToken);
-                    localStorage.setItem('refreshToken', data.refreshToken);
-                    console.log('토큰이 저장되었습니다:', data);console.log('Success:', data);
-                 // 로그인 성공 후 리다이렉션
-                    SuccessLogin();
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    
+                    // 헤더에서 액세스 토큰과 리프레시 토큰을 추출
+                   // 헤더에서 액세스 토큰과 리프레시 토큰을 추출
+    				let accessToken = response.headers.get('Authorization'); // 수정된 부분
+				 if (accessToken) {
+				        // 로컬 스토리지에 저장
+				        localStorage.setItem('accessToken', accessToken);			       
+				        // 메인 페이지로 리다이렉트
+                        window.location.href = "/"; // 리다이렉트
+				        console.log('토큰이 저장되었습니다');
+				    } else {
+				        console.error('토큰이 없습니다.');
+				    }             
                 })
-                .catch((error) => {
+                .catch(error => {
                     console.error('Error:', error);
                 });
             });
         });
         
-        function SuccessLogin() {
-            const accessToken = localStorage.getItem('accessToken');
-            
-            // JWT 토큰을 Authorization 헤더에 포함하여 요청 전송
-            fetch("/user/login/Success", {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    // 응답이 성공적일 경우 페이지 이동
-                    return response.text();  // 페이지의 HTML 응답을 받음
-                } else {
-                    throw new Error('인증 실패');
-                }
-            })
-            .then(html => {
-                document.open();
-                document.write(html);  // 받은 HTML 응답으로 페이지 교체
-                document.close();
-            })
-            .catch(error => {
-                console.error('에러:', error);
-            });
-        }
-
+        
     </script>
 </body>
 </html>

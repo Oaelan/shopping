@@ -1,5 +1,8 @@
 package com.example.demo.controller;
 
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.entity.CustomOAuth2User;
+import com.example.demo.service.JwtService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,8 +29,12 @@ import org.springframework.ui.Model;
 public class LoginGetController {
 	
 	
-	@GetMapping("/Success")
-	public String loginSuccess(Model model) {
+	@Autowired
+	JwtService js;
+	@PostMapping("/Success")
+	public String loginSuccess(Model model,HttpServletRequest request) {
+		Optional<String> accessToken = js.extractAccessToken(request);
+		log.info("accessToken",accessToken);
 	    // 현재 인증된 사용자 정보를 가져오기 위해 Spring Security의 SecurityContextHolder를 사용합니다.
 	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
