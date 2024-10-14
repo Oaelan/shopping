@@ -84,6 +84,7 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
 		// 네이버 응답의 "name" 값을 최상위 속성으로 추가
 		Map<String, Object> attributes = new HashMap<>(oAuth2User.getAttributes());
 		attributes.put("name", name);
+		attributes.put("email", email);
 
 		// 권한 설정 - 사용자 권한 정보를 설정하는 부분입니다.
 		Set<GrantedAuthority> authorities = new HashSet<>(); // 권한(역할) 정보를 저장하기 위해 Set 자료 구조를 사용해 생성합니다.

@@ -39,6 +39,11 @@ public class CustomOAuth2User implements OAuth2User {
         return (String) attributes.get(nameAttributeKey);  // 사용자 이름 속성을 반환합니다.
     }
 
+    // 이메일 반환 메서드 추가
+    public String getEmail() {
+        return (String) attributes.get("email"); // 사용자 이메일 속성을 반환합니다.
+    }
+    
     @Override
     public int hashCode() {
         return super.hashCode();
