@@ -5,6 +5,34 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1>Welcome, <span th:text="${name}"></span>님!</h1>  <!-- 사용자 이름 출력 -->
+<h1>Welcome, <span id="userEmail"></span>님!</h1>  <!-- 사용자 이름 출력 -->
+<script>
+		let accessToken = localStorage.getItem('accessToken'); // 로컬 스토리지에서 액세스 토큰 가져오기
+		getUserInfo(accessToken);
+		function getUserInfo(){
+		
+		fetch('/api/user/login/userInfo', {
+		    method: 'POST', // POST 요청
+		    headers: {
+		        'Content-Type': 'application/json',
+		        'Authorization': `Bearer ${accessToken}` // Authorization 헤더에 액세스 토큰 포함
+		    }
+		})
+		.then(response => {
+		    if (response.ok) {
+		        return response.text(); // 응답 본문을 텍스트로 변환
+		    } else {
+		        throw new Error('사용자 정보를 가져오는 데 실패했습니다.');
+		    }
+		})
+		.then(email => {
+		    document.getElementById("userEmail").innerText = `현재 로그인된 사용자: ${email}`; // 이메일을 화면에 표시
+		})
+		.catch(error => {
+		    console.error('에러 발생:', error);
+		    document.getElementById("userEmail").innerText = '사용자 정보를 불러올 수 없습니다.';
+		});
+	}
+</script>
 </body>
 </html>

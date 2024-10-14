@@ -46,15 +46,15 @@ public class CustomLogoutFilter extends LogoutFilter {
         // 로그아웃 요청인지 확인
         if (requiresLogout(httpRequest, httpResponse)) {
             // 리프레시 토큰 추출
-            String accessToken = jwtService.extractAccessToken(httpRequest).orElse(null);
-            if (accessToken != null) {
+            String refeshToken = jwtService.extractRefreshToken(httpRequest).orElse(null);
+            if (refeshToken != null) {
                 // 리프레시 토큰에서 이메일 추출
-                String email = jwtService.extractEmail(accessToken).orElse(null);
+                String email = jwtService.extractEmail(refeshToken).orElse(null);
                 if (email != null) {
                     userRepository.findByEmail(email).ifPresent(user -> {
                         user.updateRefreshToken(null); // 유저 테이블에서 리프레시 토큰 삭제
                         userRepository.save(user);
-                        log.info("로그아웃 처리 완료 및 리프레시 토큰 삭제");
+                        log.info("로그아웃 처리 완료 및 DB 리프레시 토큰 삭제");
                     });
                 }
             }
@@ -64,17 +64,23 @@ public class CustomLogoutFilter extends LogoutFilter {
             refreshCookie.setHttpOnly(true); // JavaScript에서 접근 불가
             refreshCookie.setMaxAge(0); // 쿠키 만료
             httpResponse.addCookie(refreshCookie); // 쿠키 추가
-
+            log.info("쿠키에서 저장된 리프레시 토큰 삭제");
 
             // 로그아웃 처리 후 SecurityContextHolder 비우기
             SecurityContextHolder.clearContext();
+            log.info("SecurityContextHolder 인증정보 삭제");
 
             // 로그아웃 성공 핸들러 호출
-            //getLogoutSuccessHandler().onLogoutSuccess(httpRequest, httpResponse, SecurityContextHolder.getContext().getAuthentication());
+            getLogoutSuccessHandler().onLogoutSuccess(httpRequest, httpResponse, SecurityContextHolder.getContext().getAuthentication());
             return;
         }
 
         // 로그아웃 요청이 아니라면 다음 필터로 전달
         chain.doFilter(request, response);
     }
+
+	private LogoutSuccessHandler getLogoutSuccessHandler() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

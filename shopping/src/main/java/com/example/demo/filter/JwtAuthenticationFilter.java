@@ -35,8 +35,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-	private static final String CHECK_URL = "/user/login/"; // "/login"으로 들어오는 요청은 Filter 작동 X
-	private static final String CHECK_URL1 ="/"; 
+	private static final String CHECK_URL = "/api/user/login/"; 
 	private final JwtService jwtService;
 	private final UsersRepository userRepository;
 
@@ -44,32 +43,44 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
-		log.info("요청 URI: {}", request.getRequestURI()); // 추가
-		
-		if (request.getRequestURI().startsWith(CHECK_URL)) {
+	        throws ServletException, IOException {
+	    log.info("요청 URI: {}", request.getRequestURI());
 
-		String refreshToken = jwtService.extractRefreshToken(request).filter(jwtService::isTokenValid).orElse(null);
-		
-		
-		// 액세스 토큰이 유효하지 않은 경우
-		// 클라이언트에서 리프레쉬토큰을 헤더에 넣어 다시 요청
-		if (refreshToken != null) {
-			//아래의 메소드를 호출하여 액세스/리프레쉬 토큰 재발급 
-			checkRefreshTokenAndReIssueAccessToken(response, refreshToken);
-			return;
-		}
+	    // 특정 URL 체크
+	    if (request.getRequestURI().startsWith(CHECK_URL)) {
 
-		// 액세스 토큰이 유효한 경우
-		if (refreshToken == null) {
-			
-			checkAccessTokenAndAuthentication(request, response, filterChain);
-		}
-	  }else {
-		  log.info("JwtAuthenticationFilter 건뜀ㅇㅇ");
-		  filterChain.doFilter(request, response);
-	  }
+	        // 액세스 토큰을 확인 (헤더에서 추출)
+	        String accessToken = jwtService.extractAccessToken(request).filter(jwtService::isTokenValid).orElse(null);
+	        
+	        if (accessToken == null) {
+	            // 액세스 토큰이 없거나 유효하지 않은 경우
+	            log.info("액세스 토큰이 유효하지 않음. 리프레시 토큰 검사 시작.");
+
+	            // 리프레시 토큰을 쿠키에서 추출
+	            String refreshToken = jwtService.extractRefreshToken(request).filter(jwtService::isTokenValid).orElse(null);
+	            
+	            if (refreshToken != null) {
+	                // 리프레시 토큰이 유효하면 액세스/리프레시 토큰 재발급
+	                checkRefreshTokenAndReIssueAccessToken(response, refreshToken);
+	                return; // 필터 체인 진행 중단, 새로운 액세스 토큰 발급 후 응답
+	            } else {
+	                // 리프레시 토큰도 없거나 유효하지 않은 경우
+	                log.info("리프레시 토큰이 유효하지 않음.");
+	                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "리프레시 토큰이 유효하지 않습니다.");
+	                return;
+	            }
+	        }
+
+	        // 액세스 토큰이 유효한 경우
+	        log.info("액세스 토큰이 유효함.");
+	        checkAccessTokenAndAuthentication(request, response, filterChain);
+	    } else {
+	    	// 지정된 url 경로로 요청이 들어오지 않았을 때
+	        log.info("JwtAuthenticationFilter 건너뜀.");
+	        filterChain.doFilter(request, response); // 해당 URL이 아니면 필터를 건너뜀
+	    }
 	}
+
 
 	public void checkRefreshTokenAndReIssueAccessToken(HttpServletResponse response, String refreshToken) {
 		userRepository.findByRefreshToken(refreshToken).ifPresent(user -> {

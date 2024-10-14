@@ -58,6 +58,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         log.info("발급된 AccessToken 만료 기간 : {}", accessTokenExpiration);
         log.info("로그인에 성공하였습니다. refreshToken : {}", refreshToken);
        
+        // 액세스 토큰헤더 설정되고 / 리프레쉬 토큰 쿠키에 저장됨
         jwtService.sendAccessAndRefreshToken(response, accessToken, refreshToken); // 응답 헤더에 AccessToken, RefreshToken 실어서 응답
         
     }

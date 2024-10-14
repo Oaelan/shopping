@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/user/login/api")
+@RequestMapping("/api/user/login/")
 public class LoginRestController {
 	
 

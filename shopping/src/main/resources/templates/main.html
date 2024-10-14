@@ -28,6 +28,7 @@
 	    let accessToken = localStorage.getItem('accessToken');
         loginedUser(accessToken);
         logout(accessToken);
+        console.log(accessToken);
         
 	    
 	});
@@ -59,7 +60,7 @@ function logout(accessToken){
 }
 
 function loginedUser(accessToken) {
-	 fetch('/user/login/api/userInfo', {
+	 fetch('/api/user/login/userInfo', {
          method: 'POST',
          headers: {
              'Content-Type': 'application/json',

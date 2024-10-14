@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Optional;
 
@@ -90,7 +91,7 @@ public class JwtService {
     public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
         response.setStatus(HttpServletResponse.SC_OK);
         setAccessTokenHeader(response, accessToken);
-        setRefreshTokenHeader(response, refreshToken);    
+        setRefreshTokenCookie(response, refreshToken);    
         log.info("Access Token, Refresh Token 헤더 설정 완료");
     }
 
@@ -98,13 +99,22 @@ public class JwtService {
      * 헤더에서 RefreshToken 추출
      */
     public Optional<String> extractRefreshToken(HttpServletRequest request) {
-    	String authorizationHeader = request.getHeader(refreshHeader);
-        log.info("Authorization - RefreshToken 헤더 값: {}", authorizationHeader);
+        // 모든 쿠키를 가져옴
+        Cookie[] cookies = request.getCookies();
         
-        return Optional.ofNullable(request.getHeader(refreshHeader))
-                .filter(token -> token.startsWith(BEARER))
-                .map(token -> token.replace(BEARER, ""));
+        // 쿠키가 없는 경우 Optional.empty() 반환
+        if (cookies == null) {
+            log.info("쿠키가 없습니다.");
+            return Optional.empty();
+        }
+        
+        // 지정한 쿠키(refreshHeader)를 찾음
+        return Arrays.stream(cookies)
+                     .filter(cookie -> cookie.getName().equals(refreshHeader))  // refreshHeader 이름의 쿠키를 찾음
+                     .map(Cookie::getValue)  // 쿠키의 값을 가져옴
+                     .findFirst();
     }
+
 
     /**
      * 헤더에서 AccessToken 추출
@@ -145,7 +155,7 @@ public class JwtService {
     /**
      * RefreshToken 헤더 설정
      */
-    public void setRefreshTokenHeader(HttpServletResponse response, String refreshToken) {
+    public void setRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
     	// 리프레시 토큰을 쿠키에 설정
         Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
         refreshCookie.setHttpOnly(true); // 자바스크립트에서 접근 불가능

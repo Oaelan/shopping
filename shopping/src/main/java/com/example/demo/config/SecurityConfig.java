@@ -58,7 +58,7 @@ public class SecurityConfig {
 	private final JwtService jwtService;
 	private final UsersRepository userRepository;
 	private final ObjectMapper objectMapper;
-	private final CustomLogoutSuccessHandler logoutSuccessHandler;
+	private final JwtLogoutSuccessHandler logoutSuccessHandler;
 
 
 	// Spring Security 설정을 정의하는 SecurityFilterChain을 Bean으로 등록
@@ -89,10 +89,10 @@ public class SecurityConfig {
 								"/login","/favicon.ico",
 								"/oauth2/authorization/**",
 								"/api/v1/auth/oauth2/**",
-								"/Failure","/loginUser")
+								"/Failure","/loginUser","/user/login/**")
 						.permitAll()
 						// `/login/Success` 경로는 "USER" 권한을 가진 사용자만 접근 가능
-						.requestMatchers("/user/login/**").hasRole("USER")
+						.requestMatchers("/api/user/login/**").hasRole("USER")
 						// `/api/v1/admin/**` 경로는 "ADMIN" 권한을 가진 사용자만 접근 가능
 						.requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
 						// 그 외 모든 요청에 대해 인증 필요 설정
@@ -263,5 +263,6 @@ public class SecurityConfig {
     	JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtService, userRepository);
         return jwtAuthenticationFilter;
     }
+    
 
 }
