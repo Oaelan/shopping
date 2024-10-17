@@ -3,65 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <title>Login Form</title>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 </head>
+
 <body>
 	<form id="loginForm">
 		<input type="text" name="email" placeholder="Email"> <input
 			type="password" name="password" placeholder="Password">
 		<button type="submit">Login</button>
 	</form>
-	<script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // 폼 요소를 변수에 저장
-            let loginForm = document.querySelector('#loginForm');
-
-            // 폼에 이벤트 리스너 추가 (submit 이벤트)
-            loginForm.addEventListener('submit', function(event) {
-                event.preventDefault(); // 폼의 기본 동작(페이지 새로고침)을 막습니다.
-
-                // 폼 데이터 가져오기
-                let email = loginForm.querySelector('input[name="email"]').value;
-                let password = loginForm.querySelector('input[name="password"]').value;
-
-                // JSON 데이터 생성
-                let loginData = {
-                    email: email,
-                    password: password
-                };
-
-                fetch('/loginUser', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(loginData)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    
-                    // 헤더에서 액세스 토큰과 리프레시 토큰을 추출
-                   // 헤더에서 액세스 토큰과 리프레시 토큰을 추출
-    				let accessToken = response.headers.get('Authorization'); // 수정된 부분
-				 if (accessToken) {
-				        // 로컬 스토리지에 저장
-				        localStorage.setItem('accessToken', accessToken);			       
-				        // 메인 페이지로 리다이렉트
-                        window.location.href = "/"; // 리다이렉트
-				        console.log('토큰이 저장되었습니다');
-				    } else {
-				        console.error('토큰이 없습니다.');
-				    }             
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            });
-        });
-        
-        
-    </script>
+	<script type="text/javascript"></script>
+	<script type="text/javascript" src="/js/login.js" defer></script>
 </body>
 </html>

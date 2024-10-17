@@ -1,12 +1,14 @@
 package com.example.demo.config;
 
-import com.example.demo.filter.CustomJsonUsernamePasswordAuthenticationFilter;
-import com.example.demo.filter.CustomLogoutFilter;
-import com.example.demo.filter.JwtAuthenticationFilter;
-import com.example.demo.handler.*;
-import com.example.demo.handler.OAuth2SuccessHandler;
+import com.example.demo.formLogin.CustomJsonUsernamePasswordAuthenticationFilter;
+import com.example.demo.formLogin.LoginFailureHandler;
+import com.example.demo.formLogin.LoginService;
+import com.example.demo.formLogin.LoginSuccessHandler;
+import com.example.demo.jwt.JwtAuthenticationFilter;
+import com.example.demo.jwt.JwtService;
+import com.example.demo.logout.CustomLogoutFilter;
+import com.example.demo.oauth2.OAuth2SuccessHandler;
 import com.example.demo.repository.UsersRepository;
-import com.example.demo.service.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.io.IOException;
@@ -58,7 +60,8 @@ public class SecurityConfig {
 	private final JwtService jwtService;
 	private final UsersRepository userRepository;
 	private final ObjectMapper objectMapper;
-	private final JwtLogoutSuccessHandler logoutSuccessHandler;
+	
+
 
 
 	// Spring Security 설정을 정의하는 SecurityFilterChain을 Bean으로 등록
@@ -86,13 +89,13 @@ public class SecurityConfig {
 						.requestMatchers("/swagger-ui/**", 
 								"/v3/api-docs/**", "/signUp", 
 								"/", "/login/oauth2/code/**",
-								"/login","/favicon.ico",
-								"/oauth2/authorization/**",
+								"/login","/favicon.ico","/token-save",
+								"/oauth2/authorization/**","/js/**","/css/**","/imgs/**",
 								"/api/v1/auth/oauth2/**",
 								"/Failure","/loginUser","/user/login/**")
 						.permitAll()
 						// `/login/Success` 경로는 "USER" 권한을 가진 사용자만 접근 가능
-						.requestMatchers("/api/user/login/**").hasRole("USER")
+						.requestMatchers("/api/user/login/**","/logout").hasRole("USER")
 						// `/api/v1/admin/**` 경로는 "ADMIN" 권한을 가진 사용자만 접근 가능
 						.requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
 						// 그 외 모든 요청에 대해 인증 필요 설정
@@ -161,7 +164,8 @@ public class SecurityConfig {
         // 순서 : LogoutFilter -> JwtAuthenticationProcessingFilter -> CustomJsonUsernamePasswordAuthenticationFilter
         http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);
         http.addFilterBefore(jwtAuthenticationProcessingFilter(), CustomJsonUsernamePasswordAuthenticationFilter.class);
-		
+        http.addFilterBefore(new CustomLogoutFilter(userRepository, jwtService),LogoutFilter.class);
+
 		return http.build(); // http.build()를 호출하여 최종 보안 설정을 빌드하고,이 설정된 보안 필터 체인을 반환하는 것입니다.
 	}
 
@@ -264,5 +268,5 @@ public class SecurityConfig {
         return jwtAuthenticationFilter;
     }
     
-
+   
 }

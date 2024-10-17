@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.UsersDTO;
 import com.example.demo.entity.UsersEntity;
-import com.example.demo.service.JwtService;
+import com.example.demo.jwt.JwtService;
 import com.example.demo.service.impl.LoginPostServiceImpl;
 
 

@@ -1,4 +1,4 @@
-package com.example.demo.filter;
+package com.example.demo.jwt;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.example.demo.entity.UsersEntity;
 import com.example.demo.repository.UsersRepository;
-import com.example.demo.service.JwtService;
 import com.example.demo.until.PasswordUtil;
 
 import jakarta.servlet.FilterChain;
@@ -20,6 +19,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * Jwt 인증 필터 "/login" 이외의 URI 요청이 왔을 때 처리하는 필터
@@ -35,7 +35,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-	private static final String CHECK_URL = "/api/user/login/"; 
+	private static final String CHECK_URL = "/api/user/login/";
+	private static final String SOCIAL_CHECK_URL = "/api/user/login/socialLogined"; 
 	private final JwtService jwtService;
 	private final UsersRepository userRepository;
 
@@ -44,11 +45,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 	        throws ServletException, IOException {
-	    log.info("요청 URI: {}", request.getRequestURI());
 
 	    // 특정 URL 체크
 	    if (request.getRequestURI().startsWith(CHECK_URL)) {
-
+		    log.info("요청 URI: {}", request.getRequestURI());
 	        // 액세스 토큰을 확인 (헤더에서 추출)
 	        String accessToken = jwtService.extractAccessToken(request).filter(jwtService::isTokenValid).orElse(null);
 	        
@@ -73,8 +73,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	        // 액세스 토큰이 유효한 경우
 	        log.info("액세스 토큰이 유효함.");
-	        checkAccessTokenAndAuthentication(request, response, filterChain);
-	    } else {
+	        checkAccessTokenAndAuthentication(request, response, filterChain);	    	    	
+	    }else if(request.getRequestURI().equals(SOCIAL_CHECK_URL)){
+	    	log.info("소셜로그인 후 발급된 레프리쉬 토큰으로 액세스 토큰 발급");
+	        // 액세스 토큰을 확인 (헤더에서 추출)
+	        String UserAccessToken = jwtService.extractAccessToken(request).filter(jwtService::isTokenValid).orElse(null);
+	        String UserRefreshToken = jwtService.extractRefreshToken(request).filter(jwtService::isTokenValid).orElse(null);
+	    	Optional<UsersEntity> user = userRepository.findByRefreshToken(UserRefreshToken);
+	        String email = user.get().getEmail();
+	        
+	        // 소셜 로그인 경우 리프레쉬 토큰의 값만 들어있음 
+	        if(UserAccessToken == null && UserRefreshToken != null) {
+	        	String accessToken = jwtService.createAccessToken(email);
+	        	jwtService.sendAccessToken(response, accessToken);
+	        }
+	    	
+	        checkAccessTokenAndAuthentication(request, response, filterChain);	    	    	
+
+	    }else {
 	    	// 지정된 url 경로로 요청이 들어오지 않았을 때
 	        log.info("JwtAuthenticationFilter 건너뜀.");
 	        filterChain.doFilter(request, response); // 해당 URL이 아니면 필터를 건너뜀

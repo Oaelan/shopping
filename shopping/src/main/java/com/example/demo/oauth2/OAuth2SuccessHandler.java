@@ -1,4 +1,4 @@
-package com.example.demo.handler;
+package com.example.demo.oauth2;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -11,9 +11,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import com.example.demo.entity.CustomOAuth2User;
+import com.example.demo.jwt.JwtService;
+import com.example.demo.oauth2.CustomOAuth2User;
 import com.example.demo.repository.UsersRepository;
-import com.example.demo.service.JwtService;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,18 +41,19 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             HttpServletRequest request, HttpServletResponse response,
             Authentication authentication // 인증 객체, 인증된 사용자 정보를 담고 있습니다.
     ) throws IOException, ServletException {
+    	//인증된 객체를 SecurityContextHolder 저장
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // 인증된 사용자의 정보를 가져옵니다.
         CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
-
+        
+        log.info("OAuth2SuccessHandler 실행:" + oAuth2User.toString());
         // 사용자 이름을 가져옵니다.
         String name = oAuth2User.getName();
-     // 성공적으로 인증된 후에 리다이렉트할 URL 설정
-        String targetUrl = "/user/login/Success"; // 원하는 리다이렉트 URL (예: 로그인 성공 후 홈 페이지로 이동)
-        // 로그인 성공 후 사용자를 리디렉트하며, 쿼리 파라미터에 사용자 이름을 포함시킵니다.
-        //response.sendRedirect("/user/login/Success?name=" + URLEncoder.encode(name, "UTF-8"));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-    	String email = extractUsername(authentication); // 인증 정보에서 Username(email) 추출
+        // 사용자 이름을 가져옵니다.
+        String email = oAuth2User.getEmail();
+        
+        // 우리 서버에서 유저에게 발급하는 토큰 생성
         String accessToken = jwtService.createAccessToken(email); // JwtService의 createAccessToken을 사용하여 AccessToken 발급
         String refreshToken = jwtService.createRefreshToken(); // JwtService의 createRefreshToken을 사용하여 RefreshToken 발급
       
@@ -69,14 +70,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
        
         jwtService.sendAccessAndRefreshToken(response, accessToken, refreshToken); // 응답 헤더에 AccessToken, RefreshToken 실어서 응답
         
-        
-        
+        log.info("OAuth2 로그인 성공: {}", email);
+        // 메인 페이지로 바로 리다이렉트하는 대신, 임시 페이지로 이동
         response.sendRedirect("/");
 
-    }
-    
-    private String extractUsername(Authentication authentication) {
-    	CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
-        return oAuth2User.getEmail();
     }
 }

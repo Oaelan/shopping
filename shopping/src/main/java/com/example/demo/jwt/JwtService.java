@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -31,7 +31,7 @@ public class JwtService {
     private String secretKey;
 
     @Value("${jwt.access.expiration}")
-    private Long accessTokenExpirationPeriod;
+    private int accessTokenExpirationPeriod;
 
     @Value("${jwt.refresh.expiration}")
     private int refreshTokenExpirationPeriod;
@@ -39,8 +39,8 @@ public class JwtService {
     @Value("${jwt.access.header}")
     private String accessHeader;
 
-    @Value("${jwt.refresh.header}")
-    private String refreshHeader;
+    @Value("${jwt.refresh.cookie}")
+    private String refreshCookie;
 
     private static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
     private static final String REFRESH_TOKEN_SUBJECT = "RefreshToken";
@@ -51,6 +51,9 @@ public class JwtService {
 
     /**
      * AccessToken 생성 메소드
+     * jwt 유효기간과 / cookie 유효기간은 다름 !
+     * jwt의 유효기간은 jwt가 유효한 기간
+     * cookie 유효기간은 클라이언트 측에서 쿠키가 남아있는 기간 (지나면 삭제)
      */
     public String createAccessToken(String email) {
         Date now = new Date();
@@ -81,7 +84,7 @@ public class JwtService {
      */
     public void sendAccessToken(HttpServletResponse response, String accessToken) {
         response.setStatus(HttpServletResponse.SC_OK);
-        response.setHeader(accessHeader, accessToken);
+        setAccessTokenHeader(response, accessToken);
         log.info("재발급된 Access Token : {}", accessToken);
     }
 
@@ -104,13 +107,13 @@ public class JwtService {
         
         // 쿠키가 없는 경우 Optional.empty() 반환
         if (cookies == null) {
-            log.info("쿠키가 없습니다.");
+            log.debug("리프레쉬 쿠키가 없습니다.");
             return Optional.empty();
         }
         
         // 지정한 쿠키(refreshHeader)를 찾음
         return Arrays.stream(cookies)
-                     .filter(cookie -> cookie.getName().equals(refreshHeader))  // refreshHeader 이름의 쿠키를 찾음
+                     .filter(cookie -> cookie.getName().equals(refreshCookie))  // refreshHeader 이름의 쿠키를 찾음
                      .map(Cookie::getValue)  // 쿠키의 값을 가져옴
                      .findFirst();
     }
@@ -120,12 +123,20 @@ public class JwtService {
      * 헤더에서 AccessToken 추출
      */
     public Optional<String> extractAccessToken(HttpServletRequest request) {
-    	String authorizationHeader = request.getHeader(accessHeader);
-        log.info("Authorization - AccessToken 헤더 값: {}", authorizationHeader);
-        
-        return Optional.ofNullable(request.getHeader(accessHeader))
-                .filter(token -> token.startsWith(BEARER))
-                .map(token -> token.replace(BEARER, ""));
+    	 // "accessHeader" 헤더에서 값을 가져옵니다.
+        String authorizationHeader = request.getHeader(accessHeader);
+
+        // 헤더가 없거나 형식이 잘못된 경우 처리
+        if (authorizationHeader == null || !authorizationHeader.startsWith(BEARER)) {
+            log.warn("Authorization 헤더가 없거나 Bearer 형식이 아닙니다.");
+            return Optional.empty();
+        }
+
+        // "Bearer " 접두어 제거 후 토큰 추출
+        String accessToken = authorizationHeader.substring(7);
+        log.info("헤더에서 추출한 Access Token: {}", accessToken);
+
+        return Optional.of(accessToken);
     }
 
     /**
@@ -149,7 +160,8 @@ public class JwtService {
      * AccessToken 헤더 설정
      */
     public void setAccessTokenHeader(HttpServletResponse response, String accessToken) {
-        response.setHeader(accessHeader, accessToken);
+    	response.setHeader(accessHeader, accessToken);
+        log.info("Access Token 헤더 설정 완료");
     }
 
     /**
@@ -157,13 +169,13 @@ public class JwtService {
      */
     public void setRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
     	// 리프레시 토큰을 쿠키에 설정
-        Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
-        refreshCookie.setHttpOnly(true); // 자바스크립트에서 접근 불가능
-        refreshCookie.setSecure(true); // HTTPS에서만 전송
-        refreshCookie.setPath("/"); // 쿠키의 유효 경로 설정
-        refreshCookie.setMaxAge(refreshTokenExpirationPeriod); // 쿠키 만료 시간 설정 (예: 7일)
+        Cookie cookie = new Cookie(refreshCookie, refreshToken);
+        cookie.setHttpOnly(true); // 자바스크립트에서 접근 불가능
+        cookie.setSecure(false); // HTTPS에서만 전송(true)  로컬 개발 환경에서는 false
+        cookie.setPath("/"); // 쿠키의 유효 경로 설정
+        cookie.setMaxAge(refreshTokenExpirationPeriod/1000); // 초 단위,쿠키 만료 시간 설정 (예: 7일)
 
-        response.addCookie(refreshCookie); // 쿠키 추가
+        response.addCookie(cookie); // 쿠키 추가
         log.info("Refresh Token 쿠키 설정 완료");
     }
 
