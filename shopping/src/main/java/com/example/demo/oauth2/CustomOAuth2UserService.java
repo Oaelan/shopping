@@ -43,7 +43,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 	private KakaoService kakaoService;
 	
 	@Override /* 사용자가 소셜 로그인 후 발급받은 액세스 토큰과 
-				클라이언트(우리 서버) 정보를 user-info -url으로 요청함 */
+클라이언트(우리 서버) 정보를 user-info -url으로 요청함 */
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 		// 부모의 생성자를 호출하여 리소스 서버에서 준 사용자의 정보를 OAuth2User 객체에 저장 
 		OAuth2User oAuth2User = super.loadUser(userRequest);

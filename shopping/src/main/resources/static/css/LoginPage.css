@@ -1,0 +1,541 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+html {
+  font-size: 14px;
+}
+
+header {
+  position: absolute;
+  width: 100%;
+  max-width: 1920px;
+  top: 95px;
+  z-index: 99;
+}
+header .loginform_header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 100%;
+  margin: 0 180px;
+}
+header .goBack_btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+header .goBack_btn_icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  background-color: transparent;
+  border-radius: 50px;
+}
+header .goBack_btn_icon .goback_icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateX(1px);
+}
+header .goBack_btn_icon .goback_icon .arrow_head {
+  display: flex;
+  flex-direction: column;
+  transform: translateX(2px);
+}
+header .goBack_btn_icon .goback_icon .arrow_head div {
+  width: 10px;
+  height: 3px;
+}
+header .goBack_btn_icon .goback_icon .arrow_head div:nth-child(1) {
+  transform: rotate(-45deg) translateY(-2px);
+}
+header .goBack_btn_icon .goback_icon .arrow_head div:nth-child(2) {
+  transform: rotate(45deg) translateY(2px);
+}
+header .goBack_btn_icon .goback_icon .arrow_body {
+  width: 14px;
+  height: 4px;
+  transform: translateX(-5px);
+}
+header .btn_text {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+main {
+  position: relative;
+  display: flex;
+}
+
+.loginform_imageSection {
+  position: absolute;
+  width: 50%;
+  height: calc(var(--vh, 1vh) * 100);
+  background-color: #31514F;
+  padding-top: 170px;
+  padding-left: 180px;
+  transition: background-color 0.5s, left 0.5s;
+  z-index: 98;
+}
+.loginform_imageSection .imageSection_title {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: #fff;
+  margin-bottom: 20px;
+}
+.loginform_imageSection .imageSection_title .main_text {
+  font-size: 1.5rem;
+}
+.loginform_imageSection .imageSection_title .sub_text {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.loginform_imageSection .image_container {
+  margin-bottom: 20px;
+}
+.loginform_imageSection .footer_link {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.loginform_imageSection .footer_link .homepage_terms {
+  display: flex;
+  gap: 5px;
+  color: #fff;
+}
+.loginform_imageSection .footer_link .homepage_terms a {
+  color: #fff;
+  text-decoration: none;
+}
+.loginform_imageSection .footer_link .homepage_terms a:hover {
+  text-decoration: underline;
+  font-weight: 500;
+}
+.loginform_imageSection .footer_link .company_infomation {
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  gap: 10px;
+}
+.loginform_imageSection .footer_link .company_infomation .lenguager {
+  display: flex;
+  gap: 5px;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+.loginform_imageSection .footer_link .company_infomation .company_information {
+  font-size: 0.75rem;
+}
+
+.email_necessary_warning_message {
+  font-size: 0.875rem;
+  font-weight: 500;
+  transform: opacity 0.25s;
+}
+
+.re_pw_warning_message {
+  opacity: 0;
+  color: #ff0000;
+}
+
+.membersipForm_container {
+  width: 50%;
+  margin: 125px 20px 0 180px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: 30px 1fr;
+  -moz-column-gap: 20px;
+       column-gap: 20px;
+}
+.membersipForm_container .logo {
+  grid-column: 3/5;
+  grid-row: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.membersipForm_container .membership_form {
+  grid-column: 2/6;
+  grid-row: 2;
+  margin-top: 40px;
+}
+.membersipForm_container .membership_form .userName {
+  display: flex;
+  gap: 20px;
+}
+.membersipForm_container .membership_form .userName .firstName,
+.membersipForm_container .membership_form .userName .lastName {
+  width: 100%;
+}
+.membersipForm_container .membership_form .pw_necessary_condition {
+  font-size: 0.875rem;
+  font-weight: bold;
+  height: 0;
+  overflow-y: hidden;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.membersipForm_container .membership_form .pw_necessary_condition .pw_necessary_condition_text::before {
+  content: "⚠";
+  margin-right: 5px;
+}
+.membersipForm_container .membership_form .pw_necessary_condition .pw_necessary_condition_container .pw_necessary_1 {
+  display: flex;
+  font-weight: 500;
+}
+.membersipForm_container .membership_form .pw_necessary_condition .pw_necessary_condition_container .pw_necessary_2 {
+  display: flex;
+  font-weight: 500;
+}
+.membersipForm_container .membership_form .pw_necessary_condition .pw_necessary_condition_container .pw_necessary_3 {
+  display: flex;
+  font-weight: 500;
+}
+.membersipForm_container .membership_form .pw_necessary_condition .pw_necessary_condition_container .pw_necessary_4 {
+  display: flex;
+  font-weight: 500;
+}
+.membersipForm_container .membership_form .pw_necessary_condition .pw_necessary_condition_container .pw_necessary_5 {
+  display: flex;
+  font-weight: 500;
+}
+.membersipForm_container .membership_form .pw_necessary_condition .pw_necessary_condition_container .pw_necessary_6 {
+  display: flex;
+  font-weight: 500;
+}
+.membersipForm_container .membership_form .pw_necessary_condition .pw_necessary_condition_container .warning_message_1 {
+  color: #ff0000;
+}
+.membersipForm_container .membership_form .pw_necessary_condition .pw_necessary_condition_container .warning_message_2 {
+  color: #ff0000;
+}
+.membersipForm_container .membership_form .pw_necessary_condition .pw_necessary_condition_container .warning_message_3 {
+  color: #ff0000;
+}
+.membersipForm_container .membership_form .pw_necessary_condition .pw_necessary_condition_container .warning_message_4 {
+  color: #ff0000;
+}
+.membersipForm_container .membership_form .pw_necessary_condition .pw_necessary_condition_container .warning_message_5 {
+  color: #ff0000;
+}
+.membersipForm_container .membership_form .pw_necessary_condition .pw_necessary_condition_container .warning_message_6 {
+  color: #ff0000;
+}
+.membersipForm_container .membership_form .agreement_container {
+  display: flex;
+  flex-direction: column;
+}
+.membersipForm_container .membership_form .agreement_container .agreement {
+  display: flex;
+  margin: 5px 5px 5px 0;
+  gap: 10px;
+}
+.membersipForm_container .membership_form .agreement_container .agreement a {
+  font-size: 0.875rem;
+  color: #727272;
+}
+.membersipForm_container .membership_form .login_membership_btn_container {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+.membersipForm_container .membership_form .login_membership_btn_container button {
+  width: 100%;
+  height: 60px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  color: #fff;
+  cursor: pointer;
+}
+.membersipForm_container .membership_form .login_membership_btn_container .change_into_loginform_btn {
+  background-color: #AEAEAE;
+}
+.membersipForm_container .membership_form .login_membership_btn_container .change_into_loginform_btn:hover {
+  background-color: #979797;
+}
+.membersipForm_container .membership_form .login_membership_btn_container .change_into_loginform_btn:active {
+  background-color: #727272;
+}
+.membersipForm_container .membership_form .login_membership_btn_container .membership_submit_btn {
+  background-color: #514031;
+}
+.membersipForm_container .membership_form .login_membership_btn_container .membership_submit_btn:hover {
+  background-color: #433427;
+}
+.membersipForm_container .membership_form .login_membership_btn_container .membership_submit_btn:active {
+  background-color: #514031;
+}
+
+.membership_text {
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.membership_input {
+  width: 100%;
+  height: 40px;
+  padding-left: 15px;
+  border: 1px solid #000;
+}
+
+.email_input {
+  position: relative;
+}
+.email_input button {
+  position: absolute;
+  width: 100px;
+  height: 100%;
+  right: 0;
+}
+
+.capsLockWarning {
+  display: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #ff0000;
+}
+.capsLockWarning::before {
+  content: "⚠";
+}
+
+.login_container {
+  width: 50%;
+  margin: 125px 180px 0 20px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: 30px 1fr;
+  -moz-column-gap: 20px;
+       column-gap: 20px;
+}
+.login_container .logo {
+  grid-column: 3/5;
+  grid-row: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.login_container .loginForm_container {
+  grid-column: 2/6;
+  grid-row: 2;
+}
+.login_container .loginForm_container .loginform {
+  margin-top: 60px;
+}
+.login_container .loginForm_container .loginform .login_form_input {
+  width: 75%;
+  height: 100%;
+  border: none;
+  border-radius: 5px;
+  padding-left: 15px;
+  outline: none;
+}
+.login_container .loginForm_container .loginform .input_container {
+  position: relative;
+  width: 100%;
+  height: 46px;
+  border: 1px solid #000;
+}
+.login_container .loginForm_container .loginform .checkbox_custom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.login_container .loginForm_container .loginform .checkbox_custom input[type=checkbox] {
+  display: none;
+}
+.login_container .loginForm_container .loginform .login_id_form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+.login_container .loginForm_container .loginform .login_id_form p:not(.capsLockWarning) {
+  font-size: 1rem;
+  font-weight: bold;
+}
+.login_container .loginForm_container .loginform .login_id_form .remember_id_button {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  right: 10px;
+  top: 20%;
+}
+.login_container .loginForm_container .loginform .login_id_form .remember_id_button p {
+  opacity: 0.4;
+}
+.login_container .loginForm_container .loginform .login_id_form .remember_id_button input[type=checkbox] + label {
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #000;
+  border-radius: 50px;
+  opacity: 0.6;
+}
+.login_container .loginForm_container .loginform .login_id_form .remember_id_button input[type=checkbox]:checked + label::after {
+  position: absolute;
+  display: block;
+  content: " ";
+  top: 3px;
+  left: 3px;
+  width: 12px;
+  height: 12px;
+  background-color: #000;
+  border-radius: 50px;
+  opacity: 0.6;
+}
+.login_container .loginForm_container .login_pw_form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.login_container .loginForm_container .login_pw_form p:not(.capsLockWarning) {
+  font-size: 1rem;
+  font-weight: bold;
+}
+.login_container .loginForm_container .login_pw_form .view_pw_button {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  right: 10px;
+  top: 20%;
+}
+.login_container .loginForm_container .login_pw_form .view_pw_button p {
+  opacity: 0.4;
+}
+.login_container .loginForm_container .login_pw_form .view_pw_button .checkbox_custom input[type=checkbox] + label {
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #000;
+  border-radius: 50px;
+  opacity: 0.6;
+}
+.login_container .loginForm_container .login_pw_form .view_pw_button .checkbox_custom input[type=checkbox]:checked + label::after {
+  position: absolute;
+  display: block;
+  content: " ";
+  top: 3px;
+  left: 3px;
+  width: 12px;
+  height: 12px;
+  background-color: #000;
+  border-radius: 50px;
+  opacity: 0.6;
+}
+.login_container .loginForm_container .find_id_pw {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.login_container .loginForm_container .find_id_pw a {
+  font-size: 0.875rem;
+  text-decoration: none;
+  color: #000;
+}
+.login_container .loginForm_container .find_id_pw a:hover {
+  font-weight: 500;
+}
+.login_container .loginForm_container .login_btn_container {
+  margin-bottom: 20px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #000;
+}
+.login_container .loginForm_container .login_btn_container button {
+  width: 100%;
+  height: 60px;
+  border: none;
+  border-radius: 5px;
+  background-color: #31514F;
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+.login_container .loginForm_container .login_btn_container button:hover {
+  background-color: #2a4644;
+}
+.login_container .loginForm_container .login_btn_container button:active {
+  background-color: #1e312f;
+}
+.login_container .loginForm_container .login_btn_container .sns_login_container {
+  display: flex;
+  gap: 20px;
+}
+.login_container .loginForm_container .login_btn_container .sns_login_container a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: #000;
+  gap: 20px;
+  width: 100%;
+  height: 60px;
+  border: 1px solid #000;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: border 0.1s, box-shadow 0.1s;
+}
+.login_container .loginForm_container .login_btn_container .sns_login_container .naver_login:hover {
+  border: 1px solid #fff;
+  box-shadow: 0 0 10px #03C75A;
+}
+.login_container .loginForm_container .login_btn_container .sns_login_container .naver_login:hover span {
+  color: #03C75A;
+  font-weight: bold;
+}
+.login_container .loginForm_container .login_btn_container .sns_login_container .kakao_login:hover {
+  border: 1px solid #fff;
+  box-shadow: 0 0 10px #FEE500;
+}
+.login_container .loginForm_container .login_btn_container .sns_login_container .kakao_login:hover span {
+  color: #000;
+  font-weight: bold;
+}
+.login_container .loginForm_container .membership_link_container .membership_link_title {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 25px;
+}
+.login_container .loginForm_container .membership_link_container .membership_type {
+  display: flex;
+  gap: 20px;
+}
+.login_container .loginForm_container .membership_link_container .membership_type button {
+  width: 100%;
+  height: 60px;
+  border: none;
+  border-radius: 5px;
+  background-color: #AEAEAE;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.login_container .loginForm_container .membership_link_container .membership_type button:hover {
+  background-color: #979797;
+}
+.login_container .loginForm_container .membership_link_container .membership_type button:active {
+  background-color: #727272;
+}/*# sourceMappingURL=LoginPage.css.map */

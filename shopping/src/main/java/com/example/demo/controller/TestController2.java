@@ -21,7 +21,7 @@ public class TestController2 {
 
 	@GetMapping("/login")
 	public String goLogin() {
-		return "login";
+		return "loginPage";
 	}
 
 }

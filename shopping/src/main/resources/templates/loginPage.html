@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<link rel="stylesheet" href="/css/LoginPage.css" type="text/css">
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+	<header>
+		<div class="loginform_header">
+			<div class="goBack_btn">
+				<div class="goBack_btn_icon">
+					<div class="goback_icon">
+						<div class="arrow_head">
+							<div class="arrow_head_child1"></div>
+							<div class="arrow_head_child2"></div>
+						</div>
+						<div class="arrow_body"></div>
+					</div>
+				</div>
+				<p class="btn_text" onclick="backMainpage()">뒤로 가기</p>
+			</div>
+		</div>
+	</header>
+	<main>
+		<section class="loginform_imageSection">
+			<div class="imageSection_title">
+				<h3 class="main_text"></h3>
+				<p class="sub_text"></p>
+			</div>
+			<div class="image_container">
+				<div class="loginform_image">
+					<img class="view_login_image" src="/imgs/login_photo.png"
+						alt="login_image"> <img class="view_membership_image"
+						src="/imgs/membership_photo.png" alt="membership_image"
+						style="display: none;">
+				</div>
+				<div class="membershipform_image" style="display: none;">
+					<img src="#" alt="memebership_image">
+				</div>
+			</div>
+			<div class="footer_link">
+				<div class="homepage_terms">
+					<a href="#">개인정보처리방침</a>
+					<p>|</p>
+					<a href="#">이용약관</a>
+					<p>|</p>
+					<a href="#">쿠키 설정</a>
+					<p>|</p>
+					<a href="#">쿠키 정책</a>
+				</div>
+				<div class="company_infomation">
+					<div class="lenguager">
+						<p>South Korea(대한민국)</p>
+						<p>|</p>
+						<p>한국어</p>
+					</div>
+					<div class="company_information">
+						<p>CompanyName | 사업자등록번호 : 123 - 45 - 67890 | 대표자 :
+							Zacuman.Nupkoman.sifensuki</p>
+						<p>
+							대표번호 080 - 000 - 0000 | 이메일 tifm1065@gmail.com | 통신판매업신고
+							제2000-서울시 강남구청-12345(<a href="#" style="color: #fff;">사업자정보확인</a>)
+						</p>
+					</div>
+				</div>
+			</div>
+		</section>
+		<div class="membersipForm_container">
+			<div class="logo">
+				<!-- <img src="#" alt="company_logo" class="company_logo"> -->
+				<h3>LOGO NAME</h3>
+				<!-- 테스트 텍스트 추후 삭제 -->
+			</div>
+			<form class="membership_form" autocomplete="nope">
+				<div class="userName">
+					<div class="firstName">
+						<p class="membership_text">성</p>
+						<input class="membership_input" id="firstName_input" type="text"
+							placeholder="first Name" required>
+					</div>
+					<div class="lastName">
+						<p class="membership_text">이름</p>
+						<input class="membership_input" id="lastName_input" type="text"
+							placeholder="Last Name" required>
+					</div>
+				</div>
+				<div class="userEmail">
+					<p class="membership_text">이메일</p>
+					<div class="email_input">
+						<input class="membership_input" id="membership_email_input"
+							type="text" placeholder="example@domain.com" maxlength="20" autocomplete="nope"
+							required>
+						<button type="button">인증번호 발송</button>
+					</div>
+					<p class="capsLockWarning" id="email_capsLock_warning">Caps
+						Lock이 켜져있어요.</p>
+					<p class="email_necessary_warning_message"></p>
+				</div>
+				<div class="verification_code">
+					<p class="membership_text">인증번호</p>
+					<input class="membership_input" id="verificationCode_input"
+						type="text" maxlength="6" placeholder="숫자만 입력 할 수 있어요.">
+				</div>
+				<div class="userPW">
+					<div class="userPW_container">
+						<p class="membership_text">비밀번호</p>
+						<input class="membership_input" id="membership_pw_input"
+							type="password" maxlength="20" autocomplete="nope" required >
+						<p class="capsLockWarning" id="membership_pw_capsLcok_warning">Caps
+							Lock이 켜져있어요.</p>
+					</div>
+					<div class="pw_necessary_condition">
+						<p class="pw_necessary_condition_text">비밀번호는 안전을 위해 다음과 같은 조건이
+							필요해요.</p>
+						<div class="pw_necessary_condition_container">
+							<div class="pw_necessary_1">
+								<p class="warning_message_1">비밀번호는 8자 이상, 20자 이하</p>
+								<p>로 구성 되어야 해요.</p>
+							</div>
+							<div class="pw_necessary_2">
+								<p class="warning_message_2">영어 대문자 1자 이상</p>
+								<p>이 포함 되어야 해요.</p>
+							</div>
+							<div class="pw_necessary_3">
+								<p class="warning_message_3">영어 소문자 1자 이상</p>
+								<p>이 포함 되어야 해요.</p>
+							</div>
+							<div class="pw_necessary_4">
+								<p class="warning_message_4">숫자 1자 이상</p>
+								<p>이 포함 되어야 해요.</p>
+							</div>
+							<div class="pw_necessary_5">
+								<p class="warning_message_5">특수 문자 (@, $, %, ^)중 1자 이상</p>
+								<p>이 포함 되어야 해요.</p>
+							</div>
+							<div class="pw_necessary_6">
+								<p class="warning_message_6">위 조건 이외의 문자는 사용 할 수 없어요.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="re_pw" style="display: none;">
+					<p class="membership_text">비밀번호 확인</p>
+					<input class="membership_input" id="re_pw_input" type="password"
+						placeholder="확인을 위해 비밀번호를 한번 더 입력해주세요." disabled required>
+					<div class="re_pw_necessary">
+						<p class="capsLockWarning" id="membership_re_pw_capsLcok_warning">Caps
+							Lock이 켜져있어요.</p>
+						<p class="re_pw_warning_message"
+							style="display: none; font-size: 14px;"></p>
+					</div>
+				</div>
+				<div class="agreement_container">
+					<div class="agreement">
+						<input type="checkbox">
+						<p>(필수)약관을 모두 확인했으며, 약관에 동의합니다.</p>
+						<a href="#">이용 약관</a>
+					</div>
+					<div class="agreement">
+						<input type="checkbox">
+						<p>(필수)개인정보 수집에 동의합니다.</p>
+						<a href="#">개인정보 수집 및 이용 약관</a>
+					</div>
+				</div>
+				<div class="login_membership_btn_container">
+					<button class="change_into_loginform_btn" type="button"
+						onclick="switchingForm()">로그인 페이지로</button>
+					<button class="membership_submit_btn" type="submit">회원 가입</button>
+				</div>
+			</form>
+		</div>
+		</section>
+		<section class="login_container">
+			<div class="logo">
+				<!-- <img src="#" alt="company_logo" class="company_logo"> -->
+				<h3>LOGO NAME</h3>
+				<!-- 테스트 텍스트 추후 삭제 -->
+			</div>
+			<form class="loginForm_container" id="loginForm">
+				<div class="loginform">
+					<div class="login_id_form">
+						<p>아이디</p>
+						<div class="input_container">
+							<input class="login_form_input" id="id_input" type="text"
+								maxlength="20" name="email" placeholder="이메일을 입력해주세요.">
+							<div class="remember_id_button">
+								<p>아이디 기억하기</p>
+								<div class="checkbox_custom">
+									<input type="checkbox" id="remember_id_input"> <label
+										for="remember_id_input"></label>
+								</div>
+							</div>
+						</div>
+						<p class="capsLockWarning" id="login_id_capsLock_warning">Caps
+							Lock이 켜져있어요.</p>
+					</div>
+					<div class="login_pw_form">
+						<p>비밀번호</p>
+						<div class="input_container">
+							<input class="login_form_input" id="password_input"
+								type="password" maxlength="20" name="password"
+								placeholder="비밀번호를 입력해주세요.">
+							<div class="view_pw_button">
+								<p>비밀번호 보기</p>
+								<div class="checkbox_custom">
+									<input type="checkbox" id="view_pw"> <label
+										for="view_pw"></label>
+								</div>
+							</div>
+						</div>
+						<p class="capsLockWarning" id="login_pw_capsLock_warning">Caps
+							Lock이 켜져있어요.</p>
+					</div>
+					<div class="find_id_pw">
+						<a href="#">아이디 찾기</a> <a href="#">비밀번호 찾기</a>
+					</div>
+					<div class="login_btn_container">
+						<button type="submit">로그인</button>
+						<div class="sns_login_container">
+							<a herf="#" class="naver_login"> <img
+								src="/imgs/아이콘_네이버소셜로그인.png" alt="naver_login_icon"> <span>네이버
+									로그인</span>
+							</a> <a href="#" class="kakao_login"> <img
+								src="/imgs/아이콘_카카오소셜로그인.png" alt="kakao_login_icon"> <span>카카오
+									로그인</span>
+							</a>
+						</div>
+					</div>
+			</form>
+			<div class="membership_link_container">
+				<div class="membership_link_title">
+					<h3>회원이 아니신가요?</h3>
+					<p>회원 가입 후 다양한 혜택을 누려보세요.</p>
+				</div>
+				<div class="membership_type">
+					<button onclick="switchingForm()" type="button">회원 가입</button>
+				</div>
+			</div>
+			</div>
+	</main>
+</body>
+<script rel="javascript" type="text/javascript" src="js/LoginPage.js"></script>
+<script type="text/javascript" src="/js/loginAndLogout.js" defer></script>
+
+</html>

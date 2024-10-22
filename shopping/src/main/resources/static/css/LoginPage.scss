@@ -1,0 +1,603 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Noto Sans KR", sans-serif;
+}
+
+@mixin flex_center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin flex_column {
+    display: flex;
+    flex-direction: column;
+}
+
+@mixin font_SemiBold {
+    font-weight: 500;
+}
+
+@mixin loginform_style {
+    @include flex_column();
+    gap: 16px;
+}
+
+@mixin loginform_margin_bottom {
+    margin-bottom: 20px;
+}
+
+header {
+    position: absolute;
+    // position: relative;
+    width: 100%;
+    max-width: 1920px;
+    top: 95px;
+    z-index: 99;
+
+    .loginform_header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        height: 100%;
+        margin: 0 180px;
+
+    }
+
+    .goBack_btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+    }
+
+    .goBack_btn_icon {
+        @include flex_center();
+        width: 36px;
+        height: 36px;
+        background-color: transparent;
+        border-radius: 50px;
+
+        .goback_icon {
+            @include flex_center();
+            transform: translateX(1px);
+
+            .arrow_head {
+                @include flex_column;
+                transform: translateX(2px);
+
+                div {
+                    width: 10px;
+                    height: 3px;
+
+                    &:nth-child(1) {
+                        transform: rotate(-45deg) translateY(-2px);
+                    }
+
+                    &:nth-child(2) {
+                        transform: rotate(45deg) translateY(2px);
+                    }
+                }
+            }
+
+            .arrow_body {
+                width: 14px;
+                height: 4px;
+                transform: translateX(-5px);
+            }
+        }
+    }
+
+    .btn_text {
+        font-size: 18px;
+        font-weight: bold;
+        color: #fff;
+    }
+}
+
+main {
+    position: relative;
+    display: flex;
+}
+
+.loginform_imageSection {
+    position: absolute;
+    width: 50%;
+    height: calc(var(--vh, 1vh) * 100);
+    background-color: #31514F;
+    padding-top: 170px;
+    padding-left: 180px;
+    transition: background-color 0.5s, left 0.5s;
+    z-index: 98;
+
+    .imageSection_title {
+        @include flex_column;
+        gap: 12px;
+        color: #fff;
+        margin-bottom: 20px;
+
+        .main_text {
+            font-size: 24px;
+        }
+
+        .sub_text {
+            font-size: 14px;
+            @include font_SemiBold;
+        }
+    }
+
+    .image_container {
+        margin-bottom: 20px;
+    }
+
+    .footer_link {
+        @include flex_column;
+        gap: 15px;
+
+        .homepage_terms {
+            display: flex;
+            gap: 5px;
+            color: #fff;
+
+            a {
+                color: #fff;
+                text-decoration: none;
+
+                &:hover {
+                    text-decoration: underline;
+                    @include font_SemiBold;
+                }
+            }
+        }
+
+        .company_infomation {
+            @include flex_column;
+            color: #fff;
+            gap: 10px;
+
+            .lenguager {
+                display: flex;
+                gap: 5px;
+                font-size: 20px;
+                font-weight: bold;
+            }
+
+            .company_information {
+                font-size: 12px;
+            }
+        }
+    }
+}
+
+.email_necessary_warning_message{
+    font-size: 14px;
+    @include font_SemiBold();
+    transform: opacity 0.25s;
+}
+
+.re_pw_warning_message {
+    opacity: 0;
+    color: #ff0000;
+}
+
+.membersipForm_container {
+    width: 50%;
+    margin: 125px 20px 0 180px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: 30px 1fr;
+    column-gap: 20px;
+
+    .logo {
+        grid-column: 3 / 5;
+        grid-row: 1;
+        width: 100%;
+        @include flex_center();
+    }
+
+    .membership_form {
+        grid-column: 2 / 6;
+        grid-row: 2;
+        margin-top: 40px;
+
+        .userName {
+            display: flex;
+            gap: 20px;
+
+            .firstName,
+            .lastName {
+                width: 100%;
+            }
+        }
+
+        .pw_necessary_condition {
+            font-size: 14px;
+            font-weight: bold;
+            height: 0;
+            overflow-y: hidden;
+            opacity: 0;
+            transition: opacity 0.25s;
+
+            .pw_necessary_condition_text::before {
+                content: '\26A0';
+                margin-right: 5px;
+            }
+
+            .pw_necessary_condition_container {
+                @for $i from 1 through 6 {
+                    .pw_necessary_#{$i} {
+                        display: flex;
+                        font-weight: 500;
+                    }
+                }
+
+                @for $i from 1 through 6 {
+                    .warning_message_#{$i} {
+                        // color: #62b62e;
+                        color: #ff0000;
+                    }
+                }
+            }
+        }
+
+        .agreement_container {
+            @include flex_column();
+
+            .agreement {
+                display: flex;
+                margin: 5px 5px 5px 0;
+                gap: 10px;
+
+                a {
+                    font-size: 14px;
+                    color: #727272;
+                }
+            }
+        }
+
+        .login_membership_btn_container {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+
+            button {
+                width: 100%;
+                height: 60px;
+                border: none;
+                border-radius: 5px;
+                font-size: 16px;
+                color: #fff;
+                cursor: pointer;
+            }
+
+            .change_into_loginform_btn {
+                background-color: #AEAEAE;
+
+                &:hover {
+                    background-color: #979797;
+                }
+
+                &:active {
+                    background-color: #727272;
+                }
+            }
+
+            .membership_submit_btn {
+                background-color: #514031;
+
+                &:hover {
+                    background-color: #433427;
+                }
+
+                &:active {
+                    background-color: #514031;
+                }
+            }
+        }
+    }
+}
+
+.membership_text {
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.membership_input {
+    width: 100%;
+    height: 40px;
+    padding-left: 15px;
+    border: 1px solid #000;
+}
+
+.email_input {
+    position: relative;
+
+    button {
+        position: absolute;
+        width: 100px;
+        height: 100%;
+        right: 0;
+    }
+}
+
+.capsLockWarning {
+    display: none;
+    font-size: 14px;
+    font-weight: 500;
+    color: #ff0000;
+    // transition: opacity 0.25s;
+
+    &::before {
+        content: '\26A0';
+    }
+}
+
+
+.login_container {
+    width: 50%;
+    margin: 125px 180px 0 20px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: 30px 1fr;
+    column-gap: 20px;
+
+    .logo {
+        grid-column: 3 / 5;
+        grid-row: 1;
+        width: 100%;
+        @include flex_center();
+    }
+
+    .loginForm_container {
+        grid-column: 2 / 6;
+        grid-row: 2;
+
+        .loginform {
+            margin-top: 60px;
+
+            .login_form_input {
+                width: 75%;
+                height: 100%;
+                border: none;
+                border-radius: 5px;
+                padding-left: 15px;
+                outline: none;
+            }
+
+            .input_container {
+                position: relative;
+                width: 100%;
+                height: 46px;
+                border: 1px solid #000;
+            }
+
+            .checkbox_custom {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                input[type="checkbox"] {
+                    display: none;
+                }
+            }
+
+            .login_id_form {
+                @include loginform_style();
+                margin-bottom: 22px;
+
+                p:not(.capsLockWarning) {
+                    font-size: 16px;
+                    font-weight: bold;
+                }
+
+                .remember_id_button {
+                    position: absolute;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 5px;
+                    right: 10px;
+                    top: 20%;
+
+                    p {
+                        opacity: 0.4;
+                    }
+
+                    input[type="checkbox"]+label {
+                        position: relative;
+                        display: inline-block;
+                        width: 20px;
+                        height: 20px;
+                        border: 1px solid #000;
+                        border-radius: 50px;
+                        opacity: 0.6;
+                    }
+
+                    input[type="checkbox"]:checked+label::after {
+                        position: absolute;
+                        display: block;
+                        content: " ";
+                        top: 3px;
+                        left: 3px;
+                        width: 12px;
+                        height: 12px;
+                        background-color: #000;
+                        border-radius: 50px;
+                        opacity: 0.6;
+                    }
+
+                }
+
+            }
+        }
+
+        .login_pw_form {
+            @include loginform_style();
+            @include loginform_margin_bottom();
+
+
+            p:not(.capsLockWarning) {
+                font-size: 16px;
+                font-weight: bold;
+            }
+
+            .view_pw_button {
+                position: absolute;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 5px;
+                right: 10px;
+                top: 20%;
+
+                p {
+                    opacity: 0.4;
+                }
+
+                .checkbox_custom {
+                    input[type="checkbox"]+label {
+                        position: relative;
+                        display: inline-block;
+                        width: 20px;
+                        height: 20px;
+                        border: 1px solid #000;
+                        border-radius: 50px;
+                        opacity: 0.6;
+                    }
+
+                    input[type="checkbox"]:checked+label::after {
+                        position: absolute;
+                        display: block;
+                        content: " ";
+                        top: 3px;
+                        left: 3px;
+                        width: 12px;
+                        height: 12px;
+                        background-color: #000;
+                        border-radius: 50px;
+                        opacity: 0.6;
+                    }
+                }
+            }
+        }
+
+        .find_id_pw {
+            display: flex;
+            gap: 20px;
+            @include loginform_margin_bottom();
+
+            a {
+                font-size: 14px;
+                text-decoration: none;
+                color: #000;
+
+                &:hover {
+                    font-weight: 500;
+                }
+            }
+        }
+
+        .login_btn_container {
+            @include loginform_margin_bottom();
+            padding-bottom: 30px;
+            border-bottom: 1px solid #000;
+
+            button {
+                width: 100%;
+                height: 60px;
+                border: none;
+                border-radius: 5px;
+                background-color: #31514F;
+                color: #fff;
+                font-size: 18px;
+                @include font_SemiBold();
+                margin-bottom: 20px;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: #2a4644;
+                }
+
+                &:active {
+                    background-color: #1e312f;
+                }
+            }
+
+            .sns_login_container {
+                display: flex;
+                gap: 20px;
+
+                a {
+                    @include flex_center();
+                    text-decoration: none;
+                    color: #000;
+                    gap: 20px;
+                    width: 100%;
+                    height: 60px;
+                    border: 1px solid #000;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    // box-shadow: none;
+                    transition: border 0.1s, box-shadow 0.1s;
+                }
+
+                .naver_login:hover {
+                    border: 1px solid #fff;
+                    box-shadow: 0 0 10px #03C75A;
+                }
+
+                .naver_login:hover span {
+                    color: #03C75A;
+                    font-weight: bold
+                }
+
+                .kakao_login:hover {
+                    border: 1px solid #fff;
+                    box-shadow: 0 0 10px #FEE500;
+                }
+
+                .kakao_login:hover span {
+                    color: #000;
+                    font-weight: bold
+                }
+            }
+        }
+
+        .membership_link_container {
+            .membership_link_title {
+                @include flex_column();
+                margin-bottom: 25px;
+            }
+
+            .membership_type {
+                display: flex;
+                gap: 20px;
+
+                button {
+                    width: 100%;
+                    height: 60px;
+                    border: none;
+                    border-radius: 5px;
+                    background-color: #AEAEAE;
+                    color: #fff;
+                    font-size: 16px;
+                    @include font_SemiBold();
+                    cursor: pointer;
+
+                    &:hover {
+                        background-color: #979797;
+
+                    }
+
+                    &:active {
+                        background-color: #727272;
+                    }
+                }
+            }
+        }
+    }
+}
