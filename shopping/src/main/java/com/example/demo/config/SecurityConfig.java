@@ -7,6 +7,7 @@ import com.example.demo.formLogin.LoginSuccessHandler;
 import com.example.demo.jwt.JwtAuthenticationFilter;
 import com.example.demo.jwt.JwtService;
 import com.example.demo.logout.CustomLogoutFilter;
+import com.example.demo.logout.CustomLogoutSuccessHandler;
 import com.example.demo.oauth2.OAuth2SuccessHandler;
 import com.example.demo.repository.UsersRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -60,7 +61,7 @@ public class SecurityConfig {
 	private final JwtService jwtService;
 	private final UsersRepository userRepository;
 	private final ObjectMapper objectMapper;
-	
+	private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
 
 
@@ -92,7 +93,7 @@ public class SecurityConfig {
 								"/login","/favicon.ico","/token-save",
 								"/oauth2/authorization/**","/js/**","/css/**","/imgs/**",
 								"/api/v1/auth/oauth2/**",
-								"/Failure","/loginUser","/user/login/**")
+								"/Failure","/loginUser","/user/login/**","/index")
 						.permitAll()
 						// `/login/Success` 경로는 "USER" 권한을 가진 사용자만 접근 가능
 						.requestMatchers("/api/user/login/**","/logout").hasRole("USER")
@@ -118,46 +119,12 @@ public class SecurityConfig {
 						.successHandler(oAuth2SuccessHandler)
 				)
 				
-		.logout(logout -> logout
-	            .logoutUrl("/logout") // 기본 로그아웃 URL 설정
-	            .logoutSuccessUrl("/login") // 로그아웃 성공 후 리다이렉트 URL
-	            .addLogoutHandler(new LogoutHandler() { // 커스텀 로그아웃 핸들러 추가
-	            	 public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-	            	    
-	            	        // 리프레쉬 토큰 추출
-	            	        String refreshToken = jwtService.extractRefreshToken(request).orElse(null);
-	            	        if (refreshToken != null) {
-	            	            // 유저 테이블에서 해당 리프레쉬 토큰을 삭제
-	            	            userRepository.findByRefreshToken(refreshToken).ifPresent(user -> {
-	            	                user.updateRefreshToken(null); // 리프레쉬 토큰 삭제
-	            	                userRepository.save(user);
-	            	            });
-	            	        }else {
-	            	        	log.info("리프레쉬 토큰 없음");
-	            	        }
-	            	        
-	            	        // 세션 무효화
-	            	        HttpSession session = request.getSession(false);
-	            	        if (session != null) {
-	            	            session.invalidate();
-	            	        }
-	            	    }
-	            	 
-	            })
-	            .logoutSuccessHandler(new LogoutSuccessHandler() { // 커스텀 로그아웃 성공 핸들러 추가
-	                @Override
-	                public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-	                    try {
-							response.sendRedirect("/login");
-						} catch (java.io.IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} // 로그아웃 성공 후 리다이렉트
-	                }
-	            })
-	            .deleteCookies("JSESSIONID") // 쿠키 삭제
-	        );
-
+				.logout(logout -> logout
+			            .logoutUrl("/logout") // 기본 로그아웃 URL 설정
+			            .logoutSuccessUrl("/login") // 로그아웃 성공 후 리다이렉트 URL
+			            .addLogoutHandler(customLogoutSuccessHandler)// 커스텀 로그아웃 핸들러 추가
+			            .logoutSuccessHandler(customLogoutSuccessHandler)
+			            ); // 커스텀 로그아웃 성공 핸들러 추가
 			
 		// 원래 스프링 시큐리티 필터 순서가 LogoutFilter 이후에 로그인 필터 동작
         // 따라서, LogoutFilter 이후에 우리가 만든 필터 동작하도록 설정

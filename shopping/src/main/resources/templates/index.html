@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/index.css" type="text/css">
+    <!-- <script src="https://unpkg.com/i18next/i18next.js"></script> -->
+</head>
+
+<body>
+    <main>
+        <header>
+            <div class="header_container">
+                <img class="company_logo" src="#" alt="company_logo">
+                <div class="header_menu">
+                    <p>모든 제품</p>
+                    <p>공간별 제품</p>
+                    <p> 아이디어</p>
+                </div>
+                <div class="search_input">
+                    <input type="text" placeholder="필요한 제품을 검색 해 보세요.">
+                    <div class="search_icon_container">
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+                <div class="login_container">
+                    <div class="login_icon">
+                        <div class="login_icon_ellipse"></div>
+                        <div class="login_icon_arrow">
+                            <div class="arrow_head">
+                                <div></div>
+                                <div></div>
+                            </div>
+                            <div class="arrow_body">
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p>로그인</p>
+                </div>
+                <div class="cart_container">
+                    <div class="cart_icon">
+                        <div class="cart_icon1"></div>
+                        <div class="cart_icon2">
+                            <div></div>
+                        </div>
+                    </div>
+                    <p>장바구니</p>
+                </div>
+            </div>
+            <div class="header_menu_container">
+                <div class="all_items"></div>
+                <div class="space"></div>
+                <div class="idea"></div>
+            </div>
+        </header>
+        <section class="carosel_area">
+            <div class="slide_container">
+                <div class="carosel">
+                    <div class="carosel_text_area">
+                        <p class="carosel_category">Interior</p>
+                        <h3 class="carosel_text">
+                            특별한 당신을 위한<br>
+                            특별한 소품들
+                        </h3>
+                        <div class="carosel_navigater">
+                            <ul class="navigater_container">
+                                <li class="nav_icon_1">
+                                    <div></div>
+                                </li>
+                            </ul>
+                            <div class="activate_btn" onclick="autoRevolvControl()">
+                                <div class="on" style="display: none;">
+                                    <div></div>
+                                </div>
+                                <div class="off">
+                                    <div></div>
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide_remort">
+                        <div id="prev" class="slide_remort_button" onclick="prevSlide()">
+                            <div></div>
+                            <div></div>
+                        </div>
+                        <div id="next" class="slide_remort_button" onclick="nextSlide()">
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    <div class="carosel_image">
+                        <div class="carosel_image_container">
+                            <div class="inner"><img src="../imgs/Carousel1.png" alt="slide_1"></div>
+                            <div class="inner"><img src="../imgs/Carousel1.png" alt="slide_2"></div>
+                            <div class="inner"><img src="../imgs/Carousel1.png" alt="slide_3"></div>
+                            <div class="inner"><img src="../imgs/Carousel1.png" alt="slide_4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="brand_special_exhibition">
+            <div class="exhibition_information">
+                <div class="brand_background">
+                    <!-- <img src="../imgs\Group 90.png" alt=""> -->
+                </div>
+                <div class="brand_headline">
+                    <div class="brand_headline_container">
+                        <div class="title">
+                            <h3>BrandName</h3>
+                            <p>브랜드 기획전</p>
+                        </div>
+                        <p>삶을 채우는 공간의 예술</p>
+                    </div>
+                </div>
+                <div class="Brand_introduce">
+                    <h3>공간을 넘어 삶을 디자인 합니다.</h3>
+                    <p class="introduce_1">
+                        <strong>
+                            우리는 단순히 아름다운 공간을 만드는 것을 넘어<br>
+                            당신의 삶에 가치를 더하는 디자인을 제공합니다.
+                        </strong>
+                    </p>
+                    <p class="introduce_2">
+                        당신의 생활방식과 취향을 반영한 맞춤형 인테리어로<br>
+                        집을 편안한 안식처이자 일상의 영감을 주는 공간으로 변화시킵니다<br>
+                        <br>
+                        세심하게 선별된 소재와 창의적인 디자인을 통해<br>
+                        공간의 기능성과 미적 감각을 동시에 만족시키는 것을 목표로 합니다<br>
+                        <br>
+                        우리의 철학은 공간이 곧 삶의 질을 결정한다는 믿음에서 출발합니다<br>
+                        이제, 당신만의 특별한 공간을 우리와 함께 만들어 보세요
+                    </p>
+                    <button>제품 보러가기</button>
+                </div>
+            </div>
+            </div>
+        </section>
+        <section class="item_recommend">
+            <div class="item_recommend_container">
+                <div class="select_category_container">
+                    <h3>이런 상품은 어때요?</h3>
+                    <button class="category_1"><span>침대</span></button>
+                    <button class="category_2"><span>수납/정리</span></button>
+                    <button class="category_3"><span>러그</span></button>
+                    <button class="category_4"><span>조명</span></button>
+                    <button class="category_5"><span>텍스타일</span></button>
+                    <button class="category_6"><span>주방</span></button>
+                    <div class="moreview moreview--item_recommend"><a href="#">More View</a></div>
+                </div>
+                <div class="item_preview">
+                    <div class="item_preview_button_container">
+                        <div class="button_background">
+                            <div class="item_preview_controller item_preview_controller--prev"
+                                onclick="item_preview_control_prev()">
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </div>
+                        <div class="button_background">
+                            <div class="item_preview_controller item_preview_controller--next"
+                                onclick="item_preview_control_next()">
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item_container">
+                        <div class="item_preview_container">
+                            <div class="preview">
+                                <img src="../imgs/testItem.png" alt="preview_1" draggable={false}>
+                                <div class="item_information">
+                                    <h3>ItemName</h3>
+                                    <div class="price_area">
+                                        <p class="price">2,147,483,647</p>
+                                        <p>KRW</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="buy_now"><a href="#">Buy Now</a></div>
+                        </div>
+                        <div class="item_preview_container">
+                            <div class="preview">
+                                <img src="../imgs/testItem.png" alt="preview_1">
+                                <div class="item_information">
+                                    <h3>ItemName</h3>
+                                    <div class="price_area">
+                                        <p class="price">2,147,483,647</p>
+                                        <p>KRW</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="buy_now"><a href="#">Buy Now</a></div>
+                        </div>
+                        <div class="item_preview_container">
+                            <div class="preview">
+                                <img src="../imgs/testItem.png" alt="preview_1">
+                                <div class="item_information">
+                                    <h3>ItemName</h3>
+                                    <div class="price_area">
+                                        <p class="price">2,147,483,647</p>
+                                        <p>KRW</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="buy_now">
+                                <a href="#">Buy Now</a>
+                            </div>
+                        </div>
+                        <div class="item_preview_container">
+                            <div class="preview">
+                                <img src="../imgs/testItem.png" alt="preview_1">
+                                <div class="item_information">
+                                    <h3>ItemName</h3>
+                                    <div class="price_area">
+                                        <p class="price">2,147,483,647</p>
+                                        <p>KRW</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="buy_now">
+                                <a href="#">Buy Now</a>
+                            </div>
+                        </div>
+                        <div class="item_preview_container">
+                            <div class="preview">
+                                <img src="../imgs/testItem.png" alt="preview_1">
+                                <div class="item_information">
+                                    <h3>ItemName</h3>
+                                    <div class="price_area">
+                                        <p class="price">2,147,483,647</p>
+                                        <p>KRW</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="buy_now">
+                                <a href="#">Buy Now</a>
+                            </div>
+                        </div>
+                        <div class="item_preview_container">
+                            <div class="preview">
+                                <img src="../imgs/testItem.png" alt="preview_1">
+                                <div class="item_information">
+                                    <h3>ItemName</h3>
+                                    <div class="price_area">
+                                        <p class="price">2,147,483,647</p>
+                                        <p>KRW</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="buy_now">
+                                <a href="#">Buy Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="preview_scroll">
+                    <div class="scroll_handle"></div>
+                </div>
+            </div>
+        </section>
+        <section class="inspiration_item">
+            <div class="inspiration_item_container">
+                <div class="inspiration_head">
+                    <h3>당신의 무대에 영감을 더해 줄 아이템</h3>
+                    <div class="moreview moreview--inspiration"><a href="#">moreview</a></div>
+                </div>
+                <div class="inspiration_item_preview">
+                    <div class="inspiration_preview inspiration_preview--1">
+                        <img src="../imgs/inspirtion_test_image.png" alt="inspiration_item_preview">
+                        <div class="inspiration_item_information_container">
+                            <div class="inspiration_item_information">
+                                <h3 class="inspiration_preview_item_name">
+                                    inspiration_preview_item_name
+                                </h3>
+                                <div class="inspiration_item_price_container">
+                                    <p class="inspiration_item_price">2,147,483,647</p>
+                                    <p>KRW</p>
+                                </div>
+                            </div>
+                            <div class="view_item_icon">
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inspiration_preview inspiration_preview--2">
+                        <img src="../imgs/inspirtion_test_image2.png" alt="inspiration_item_preview">
+                        <div class="inspiration_item_information_container">
+                            <div class="inspiration_item_information">
+                                <h3 class="inspiration_preview_item_name">
+                                    inspiration_preview_item_name
+                                </h3>
+                                <div class="inspiration_item_price_container">
+                                    <p class="inspiration_item_price">2,147,483,647</p>
+                                    <p>KRW</p>
+                                </div>
+                            </div>
+                            <div class="view_item_icon">
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inspiration_preview inspiration_preview--3">
+                        <img src="../imgs/inspirtion_test_image2.png" alt="inspiration_item_preview">
+                        <div class="inspiration_item_information_container">
+                            <div class="inspiration_item_information">
+                                <h3 class="inspiration_preview_item_name">
+                                    inspiration_preview_item_name
+                                </h3>
+                                <div class="inspiration_item_price_container">
+                                    <p class="inspiration_item_price">2,147,483,647</p>
+                                    <p>KRW</p>
+                                </div>
+                            </div>
+                            <div class="view_item_icon">
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inspiration_preview inspiration_preview--4">
+                        <img src="../imgs/inspirtion_test_image.png" alt="inspiration_item_preview">
+                        <div class="inspiration_item_information_container">
+                            <div class="inspiration_item_information">
+                                <h3 class="inspiration_preview_item_name">
+                                    inspiration_preview_item_name
+                                </h3>
+                                <div class="inspiration_item_price_container">
+                                    <p class="inspiration_item_price">2,147,483,647</p>
+                                    <p>KRW</p>
+                                </div>
+                            </div>
+                            <div class="view_item_icon">
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </section>
+        <section class="eco_project">
+            <div class="eco_project_text">
+                <h3>더 나은 미래를 위한 지속 가능한 솔루션</h3>
+                <p>
+                    우리는 지속 가능한 인테리어 디자인을 통해 자연을 보호하고 자원을 절약하는 혁신적인 친환경 솔루션을 제공합니다.<br>
+                    저희 기업의 목표는 자연과 조화를 이루는 환경 친화적인 공간을 창조함으로써, 모두가 더 나은 삶을 누릴 수 있도록 기여하는 것입니다.
+                </p>
+                <button>자세히 보기</button>
+            </div>
+        </section>
+        <section class="service">
+            <h3 class="service_title">다양한 서비스를 제공합니다.</h3>
+            <div class="service_link_container">
+                <div class="service service--1">
+                    <div class="service_text">
+                        <h3>배송 서비스</h3>
+                        <p>무게 별로 배송비를 측정하여 합리적인 배송료로 서비스를 제공합니다.</p>
+                    </div>
+                    <button class="service_link_button"><span>자세히보기</span></button>
+                    <img class="service_background_image" src="../imgs/service1.png">
+                </div>
+                <div class="service service--2">
+                    <div class="service_text">
+                        <h3>설치 서비스</h3>
+                        <p>무게 별로 배송비를 측정하여 합리적인 배송료로 서비스를 제공합니다.</p>
+                    </div>
+                    <button class="service_link_button"><span>자세히보기</span></button>
+                    <img class="service_background_image" src="../imgs/service2.png">
+                </div>
+                <div class="service service--3">
+                    <div class="service_text">
+                        <h3>조립 서비스</h3>
+                        <p>무게 별로 배송비를 측정하여 합리적인 배송료로 서비스를 제공합니다.</p>
+                    </div>
+                    <button class="service_link_button"><span>자세히보기</span></button>
+                    <img class="service_background_image" src="../imgs/service3.png">
+                </div>
+                <div class="service service--4">
+                    <div class="service_text">
+                        <h3>리사이클 페이백 서비스</h3>
+                        <p>무게 별로 배송비를 측정하여 합리적인 배송료로 서비스를 제공합니다.</p>
+                    </div>
+                    <button class="service_link_button"><span>자세히보기</span></button>
+                    <img class="service_background_image" src="../imgs/service4.png">
+                </div>
+                <div class="more_service">
+                    <div class="service_text">
+                        <h3>다른 서비스도 준비 되어 있습니다.</h3>
+                        <p>모든 서비스를 확인 해 보세요.</p>
+                    </div>
+                    <div class="all_service_link_container">
+                        <div class="moreview moreview--service"><a href="#">모든 서비스</a></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="footer_container">
+            <div class="footer_left">
+                <h3 class="mainText">
+                    홈 데코가 처음이신가요?<br>
+                    저희가 돕겠습니다.
+                </h3>
+                <div class="footer_link_container">
+                    <div class="footer_link">
+                        <div class="arrow_icon">
+                            <div class="footerLink_arrow">
+                                <div class="footerLink_arrow_body"></div>
+                                <div class="footerLink_arrow_head">
+                                    <div></div>
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="footer_link_text">수석 인테리어 디자이너의 추천</h3>
+                    </div>
+                    <div class="footer_link">
+                        <div class="arrow_icon">
+                            <div class="footerLink_arrow">
+                                <div class="footerLink_arrow_body"></div>
+                                <div class="footerLink_arrow_head">
+                                    <div></div>
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="footer_link_text">1:1 견적 문의</h3>
+                    </div>
+                </div>
+                <div class="company_logo">
+                    <img src="#" alt="company_logo">
+                </div>
+                <button class="change_lenguage">언어 변경</button>
+                <div class="lenguager">
+                    <p>South Korea(대한민국)</p>
+                    <p>|</p>
+                    <p>한국어</p>
+                </div>
+                <div class="homepage_terms">
+                    <a href="#">개인정보처리방침</a>
+                    <p>|</p>
+                    <a href="#">이용약관</a>
+                    <p>|</p>
+                    <a href="#">쿠키 설정</a>
+                    <p>|</p>
+                    <a href="#">쿠키 정책</a>
+                </div>
+                <div class="company_information">
+                    <p>CompanyName | 사업자등록번호 : 123 - 45 - 67890 | 대표자 : Zacuman.Nupkoman.sifensuki</p>
+                    <p>대표번호 080 - 000 - 0000 | 이메일 tifm1065@gmail.com | 통신판매업신고 제2000-서울시 강남구청-12345(사업자정보확인)</p>
+                </div>
+            </div>
+            <div class="footer_right">
+                <img src="../imgs/kakao.png" alt="" class="sns_icon1">
+                <img src="../imgs/insta.png" alt="" class="sns_icon2">
+                <img src="../imgs/naver.png" alt="" class="sns_icon3">
+            </div>
+        </div>
+    </footer>
+    <script rel="javascript" type="text/javascript" src="../js/index.js"></script>
+</body>
+
+
+</html>
