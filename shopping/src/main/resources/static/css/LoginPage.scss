@@ -31,6 +31,10 @@
     margin-bottom: 20px;
 }
 
+html {
+    font-size: 16px;
+}
+
 header {
     position: absolute;
     // position: relative;
@@ -93,7 +97,7 @@ header {
     }
 
     .btn_text {
-        font-size: 18px;
+        font-size: 1rem;
         font-weight: bold;
         color: #fff;
     }
@@ -121,17 +125,26 @@ main {
         margin-bottom: 20px;
 
         .main_text {
-            font-size: 24px;
+            font-size: 1.5rem;
         }
 
         .sub_text {
-            font-size: 14px;
+            font-size: 0.875rem;
             @include font_SemiBold;
         }
     }
 
     .image_container {
         margin-bottom: 20px;
+        max-width: 500px;
+        max-height: 415px;
+        width: 100%;
+        height: 100%;
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
     }
 
     .footer_link {
@@ -162,19 +175,19 @@ main {
             .lenguager {
                 display: flex;
                 gap: 5px;
-                font-size: 20px;
+                font-size: 1.25rem;
                 font-weight: bold;
             }
 
             .company_information {
-                font-size: 12px;
+                font-size: 0.75rem;
             }
         }
     }
 }
 
-.email_necessary_warning_message{
-    font-size: 14px;
+.email_necessary_warning_message {
+    font-size: 0.875rem;
     @include font_SemiBold();
     transform: opacity 0.25s;
 }
@@ -215,7 +228,7 @@ main {
         }
 
         .pw_necessary_condition {
-            font-size: 14px;
+            font-size: 0.875rem;
             font-weight: bold;
             height: 0;
             overflow-y: hidden;
@@ -253,7 +266,7 @@ main {
                 gap: 10px;
 
                 a {
-                    font-size: 14px;
+                    font-size: 0.875rem;
                     color: #727272;
                 }
             }
@@ -269,7 +282,7 @@ main {
                 height: 60px;
                 border: none;
                 border-radius: 5px;
-                font-size: 16px;
+                font-size: 1rem;
                 color: #fff;
                 cursor: pointer;
             }
@@ -326,7 +339,7 @@ main {
 
 .capsLockWarning {
     display: none;
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 500;
     color: #ff0000;
     // transition: opacity 0.25s;
@@ -390,7 +403,7 @@ main {
                 margin-bottom: 22px;
 
                 p:not(.capsLockWarning) {
-                    font-size: 16px;
+                    font-size: 1rem;
                     font-weight: bold;
                 }
 
@@ -441,7 +454,7 @@ main {
 
 
             p:not(.capsLockWarning) {
-                font-size: 16px;
+                font-size: 1rem;
                 font-weight: bold;
             }
 
@@ -491,7 +504,7 @@ main {
             @include loginform_margin_bottom();
 
             a {
-                font-size: 14px;
+                font-size: 0.875rem;
                 text-decoration: none;
                 color: #000;
 
@@ -513,7 +526,7 @@ main {
                 border-radius: 5px;
                 background-color: #31514F;
                 color: #fff;
-                font-size: 18px;
+                font-size: 1.25rem;
                 @include font_SemiBold();
                 margin-bottom: 20px;
                 cursor: pointer;
@@ -584,7 +597,7 @@ main {
                     border-radius: 5px;
                     background-color: #AEAEAE;
                     color: #fff;
-                    font-size: 16px;
+                    font-size: 1rem;
                     @include font_SemiBold();
                     cursor: pointer;
 

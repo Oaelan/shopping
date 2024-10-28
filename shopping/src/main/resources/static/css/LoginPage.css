@@ -8,7 +8,7 @@
 }
 
 html {
-  font-size: 14px;
+  font-size: 16px;
 }
 
 header {
@@ -103,6 +103,14 @@ main {
 }
 .loginform_imageSection .image_container {
   margin-bottom: 20px;
+  max-width: 500px;
+  max-height: 415px;
+  width: 100%;
+  height: 100%;
+}
+.loginform_imageSection .image_container img {
+  width: 100%;
+  height: 100%;
 }
 .loginform_imageSection .footer_link {
   display: flex;
