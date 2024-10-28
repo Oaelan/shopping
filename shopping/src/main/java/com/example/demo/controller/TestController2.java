@@ -11,12 +11,12 @@ public class TestController2 {
 	
 	@GetMapping("/index")
 	public String goIndex1(Model model) {
-		return "index";
+		return "main";
 	}
 
 	@GetMapping("/")
 	public String goIndex(Model model) {
-		return "main";
+		return "index";
 	}
 
 	@GetMapping("/Failure")
