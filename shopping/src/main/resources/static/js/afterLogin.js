@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	loginType();
 });
 // 로그인한 사용자 정보를 화면에 표시하는 함수
+
 async function fetchUserInfo(accessToken) {
 	try {
 		const response = await axios.post('/api/user/login/userInfo', {}, {
@@ -16,7 +17,7 @@ async function fetchUserInfo(accessToken) {
 			document.getElementById("userEmail").innerText = `현재 로그인된 사용자: ${email}`; // 이메일 표시
 		} else {
 			throw new Error('사용자 정보를 가져오는 데 실패했습니다.');
-		}r
+		}
 	} catch (error) {
 		console.error('에러 발생:', error);
 		document.getElementById("userEmail").innerText = `사용자 정보를 가져오는 데 실패했습니다.`;
