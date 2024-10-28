@@ -8,7 +8,7 @@ window.addEventListener("resize", () => {
 });
 
 document.querySelector('.login_container').addEventListener("click" , function(){
-    window.location.href = "login_membership/LoginPage.html";
+    window.location.href = "http://localhost:8080/login";
 })
 
 const  carouselContainer = document.querySelector('.carosel_image_container');
