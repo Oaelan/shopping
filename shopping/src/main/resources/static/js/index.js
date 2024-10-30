@@ -7,6 +7,7 @@ window.addEventListener("resize", () => {
     document.documentElement.style.setProperty("--vh", `${vh}px`); // CSS 변수로 업데이트
 });
 
+// 로그인 버튼 클릭시 로그인 페이지로 이동
 document.querySelector('.login_container').addEventListener("click" , function(){
     window.location.href = "http://localhost:8080/login";
 })

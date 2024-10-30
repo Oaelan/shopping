@@ -6,28 +6,54 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-	<input type="file" id="p_Img">
 
-	<div id="p_Info">
-		<input type="text" id="p_name" placeholder="상품 이름">
-		<input type="number" id="p_stock" placeholder="재고 수">
-		<input type="number" id="p_price" placeholder="상품 가격">
-		<select id="p_category"></select>
-		<input type="text" id="p_description"placeholder="상품 설명">
-	</div>
-	
+
+	<form id="p_Info" enctype="multipart/form-data">
+		<input type="text" id="p_name" placeholder="상품 이름"> <input
+			type="number" id="p_stock" placeholder="재고 수"> <input
+			type="number" id="p_price" placeholder="상품 가격"> <select
+			id="p_category"></select> <input type="text" id="p_description"
+			placeholder="상품 설명"> <input type="file" id="p_Img"
+			name="file">
+		<button type="submit">상품 등록하기</button>
+	</form>
+
 	<script type="text/javascript">
+	//getCategory();
+	registerProduct();
 	
-	function getCategory(){
-		
+	
+	function getCategory(){		
 		// GET 요청 보내기
-		axios.get('/api/admin/product/category')
+		axios.get('/api/admin/test/category')
 		  .then(response => {
 		    console.log('응답 데이터:', response.data);
 		  })
 		  .catch(error => {
 		    console.error('에러 발생:', error);
 		  });
+	}
+	
+	function registerProduct(){
+		document.getElementById("p_Info").addEventListener("submit", function(event) {
+		    event.preventDefault(); // 기본 제출 동작 방지
+
+		    let formData = new FormData(this); // 폼 데이터 생성
+
+		    // Axios POST 요청
+		    axios.post('/api/admin/test/upload', formData, {
+		        headers: {
+		            'Content-Type': 'multipart/form-data' // 요청 헤더 설정
+		        }
+		    })
+		    .then(response => {
+		        alert(response.data); // 서버 응답 표시
+		    })
+		    .catch(error => {
+		        console.error(error); // 오류 콘솔 출력
+		        alert('파일 업로드 중 오류가 발생했습니다.'); // 사용자에게 오류 알림
+		    });
+		});
 	}
 	</script>
 </body>

@@ -28,5 +28,10 @@ public class TestController2 {
 	public String goLogin() {
 		return "loginPage";
 	}
+	
+	@GetMapping("/api/admin/test/ProductUpload")
+	public String goProductUpload() {
+		return "productUploadPage";
+	}
 
 }

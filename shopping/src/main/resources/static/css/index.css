@@ -122,6 +122,59 @@ header .header_container .login_container .login_icon .login_icon_arrow .arrow_b
   background-color: #fff;
   transform: translateX(-8px);
 }
+
+/* 로그아웃 버튼 css */
+header .header_container .logout_container {
+  grid-column: 11;
+  cursor: pointer;
+  display: none;
+}
+header .header_container .logout_container p {
+  color: #fff;
+}
+header .header_container .logout_container .login_icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+header .header_container .logout_container .login_icon .login_icon_ellipse {
+  width: 30px;
+  height: 30px;
+  border: 2px solid #fff;
+  border-left-color: transparent;
+  border-radius: 50px;
+}
+header .header_container .logout_container .login_icon .login_icon_arrow {
+  transform: translateX(-25px);
+}
+header .header_container .logout_container .login_icon .login_icon_arrow .arrow_head {
+  position: relative;
+}
+header .header_container .logout_container .login_icon .login_icon_arrow .arrow_head div:nth-child(1) {
+  position: absolute;
+  width: 8px;
+  height: 2px;
+  background-color: #fff;
+  transform: rotate(45deg) translateY(-4px);
+}
+header .header_container .logout_container .login_icon .login_icon_arrow .arrow_head div:nth-child(2) {
+  position: absolute;
+  width: 8px;
+  height: 2px;
+  background-color: #fff;
+  transform: rotate(-45deg) translateY(4px);
+}
+header .header_container .logout_container .login_icon .login_icon_arrow .arrow_body {
+  position: relative;
+}
+header .header_container .logout_container .login_icon .login_icon_arrow .arrow_body div {
+  position: absolute;
+  width: 18px;
+  height: 2px;
+  background-color: #fff;
+  transform: translateX(-8px);
+}
+
 header .header_container .cart_container {
   grid-column: 12;
   color: #fff;

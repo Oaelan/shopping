@@ -92,7 +92,7 @@ public class SecurityConfig {
 								"/", "/login/oauth2/code/**",
 								"/login","/favicon.ico","/token-save",
 								"/oauth2/authorization/**","/js/**","/css/**","/imgs/**",
-								"/api/v1/auth/oauth2/**",
+								"/api/v1/auth/oauth2/**", "/api/admin/test/**",
 								"/Failure","/loginUser","/user/login/**","/index")
 						.permitAll()
 						// `/login/Success` 경로는 "USER" 권한을 가진 사용자만 접근 가능

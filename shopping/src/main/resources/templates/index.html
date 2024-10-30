@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="../css/index.css" type="text/css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
     <!-- <script src="https://unpkg.com/i18next/i18next.js"></script> -->
 </head>
 
@@ -26,7 +28,8 @@
                         <div></div>
                     </div>
                 </div>
-                <div class="login_container">
+                <!-- 로그인  -->
+                <div class="login_container" id="login_container">
                     <div class="login_icon">
                         <div class="login_icon_ellipse"></div>
                         <div class="login_icon_arrow">
@@ -41,6 +44,23 @@
                     </div>
                     <p>로그인</p>
                 </div>
+                <!-- 로그인 후 -->
+                <div class="logout_container" id="logout_container">
+                    <div class="login_icon">
+                        <div class="login_icon_ellipse"></div>
+                        <div class="login_icon_arrow">
+                            <div class="arrow_head">
+                                <div></div>
+                                <div></div>
+                            </div>
+                            <div class="arrow_body">
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p>로그아웃</p>
+                </div>
+                <!-- 장바구니 -->
                 <div class="cart_container">
                     <div class="cart_icon">
                         <div class="cart_icon1"></div>
@@ -466,7 +486,8 @@
         </div>
     </footer>
     <script rel="javascript" type="text/javascript" src="../js/index.js"></script>
+	<script type="text/javascript" src="../js/logout.js"></script>
+	<script type="text/javascript" src="../js/loginType.js"></script>
+	<script type="text/javascript" src="../js/afterLogin.js"></script>
 </body>
-
-
 </html>

@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
-	loginType();
+	showLoginBorLogOutB();
+	loginType();	
 });
 // 로그인한 사용자 정보를 화면에 표시하는 함수
 
@@ -14,7 +15,8 @@ async function fetchUserInfo(accessToken) {
 
 		if (response.status === 200) {
 			const email = response.data; // 응답 본문에서 이메일 정보 추출
-			document.getElementById("userEmail").innerText = `현재 로그인된 사용자: ${email}`; // 이메일 표시
+			//document.getElementById("loginTrueOrFalse").innerText ="로그아웃"
+			//document.getElementById("userEmail").innerText = `현재 로그인된 사용자: ${email}`; // 이메일 표시
 		} else {
 			throw new Error('사용자 정보를 가져오는 데 실패했습니다.');
 		}
@@ -61,4 +63,29 @@ async function loginType() {
 			await fetchUserInfo(accessToken); // 사용자 정보 불러오기
 		}
 	}
+}
+
+function showLoginBorLogOutB() {
+	let accessToken = localStorage.getItem('Authorization'); // 로컬 스토리지에 저장된 토큰
+	if (accessToken) {
+		// 로그인 후
+		showLogout();
+	} else {
+		// 로그인 전
+		showLogin();
+	}
+}
+
+//로그인 전후에 따라 메인 헤더의 버튼 보이게 안보이게 하기
+function showLogin() {
+	//액세스 토큰 존재하지 않을 시 로그인 버튼이 보이게
+	document.getElementById("login_container").style.display = "block";
+	document.getElementById("logout_container").style.display = "none";
+
+}
+
+function showLogout() {
+	//액세스 토큰 존재할 때 로그아웃 버튼이 보이게
+	document.getElementById("login_container").style.display = "none";
+	document.getElementById("logout_container").style.display = "block";
 }
