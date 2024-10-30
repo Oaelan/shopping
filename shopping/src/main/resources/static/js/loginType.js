@@ -39,6 +39,7 @@ async function fetchSocialLoginToken() {
 			const accessToken = response.headers['authorization'].replace('Bearer ', '');
 			localStorage.setItem('Authorization', accessToken); // 로컬 스토리지에 저장된 토큰
 			console.log("소셜 로그인 후 발급받은 액세스 토큰을 저장했습니다.");
+			window.location.href = "/"; 
 			return accessToken; // 토큰 반환
 		} else {
 			throw new Error('사용자 정보를 가져오는 데 실패했습니다.');
@@ -68,6 +69,7 @@ async function loginType() {
 function showLoginBorLogOutB() {
 	let accessToken = localStorage.getItem('Authorization'); // 로컬 스토리지에 저장된 토큰
 	if (accessToken) {
+		console.log(accessToken);
 		// 로그인 후
 		showLogout();
 	} else {

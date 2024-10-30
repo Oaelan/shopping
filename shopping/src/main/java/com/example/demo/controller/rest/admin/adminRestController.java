@@ -21,6 +21,8 @@ import com.example.demo.dto.CategoryDTO;
 import com.example.demo.entity.CategoriesEntity;
 import com.example.demo.service.admin.ProductService;
 
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @RestController
 public class adminRestController {
 	
@@ -35,15 +37,28 @@ public class adminRestController {
 	}
 	
 	
-	private String uploadDir = "/Users/aelanoh/Desktop/ShoppingProject P_Imgs";
+	private String uploadDir = "/Users/aelanoh/Desktop/ShoppingProject_P_Imgs";
 	
 	@PostMapping("/api/admin/test/upload")
+	// 상품 정보 테이블에 추가 되는 로직 추가해야함!
 	public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
 	    try {
+	    	// 업로드된 파일 이름 가져오기
+	        String originalFilename = file.getOriginalFilename();
+	    	log.info("file: " + originalFilename); // 업로드된 파일 이름 로그
+	    	// 파일 확장자 추출
+	        String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+	        log.info("파일 확장: " + fileExtension); // 업로드된 파일 이름 로그	
+	    	
+	    	
 	        // 고유한 파일명 생성
-	        String filename = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-	        Path filePath = Paths.get(uploadDir + filename);
-
+	        String filename = UUID.randomUUID().toString() + fileExtension; // 수정된 부분
+	        Path filePath = Paths.get(uploadDir, filename); // 수정된 부분
+	        
+	        if (!Files.exists(filePath)) {
+	           log.info("해당 파일 경로가 없습니다");
+	        }
+	        
 	        // 파일 저장
 	        Files.write(filePath, file.getBytes());
 

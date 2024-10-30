@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	setupLogoutButton();
 });
 
-
 // 로그아웃 버튼 클릭 이벤트 처리 함수
 function setupLogoutButton() {
     logoutButton.addEventListener('click', handleLogout);
