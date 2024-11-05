@@ -37,7 +37,7 @@ public class adminRestController {
 	}
 	
 	
-	private String uploadDir = "/Users/aelanoh/Desktop/ShoppingProject_P_Imgs";
+	private String uploadDir = "src/main/resources/static/product_Img";
 	
 	@PostMapping("/api/admin/test/upload")
 	// 상품 정보 테이블에 추가 되는 로직 추가해야함!
